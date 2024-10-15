@@ -72,6 +72,7 @@ class _MainScreenState extends BaseState<MainScreen>
   @override
   Widget baseBuild(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
         margin: const EdgeInsets.symmetric(horizontal:  10),
