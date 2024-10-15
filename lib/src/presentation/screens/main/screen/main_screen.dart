@@ -73,15 +73,15 @@ class _MainScreenState extends BaseState<MainScreen>
   Widget baseBuild(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(50)),
-        child: Container(
-          height: 75,
-          width: MediaQuery.of(context).size.width*0.7,
-          // margin: const EdgeInsets.symmetric(horizontal: 10),
-          child: BottomNavigationBar(
-            items: [
-              BottomNavigationBarItem(
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.symmetric(horizontal:  10),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(50)),
+          child: SizedBox(
+            height: 70,
+            child: BottomNavigationBar(
+              items: [
+                BottomNavigationBarItem(
                   icon: Container(
                       decoration: BoxDecoration(
                         color: ColorSchemes.gray.withOpacity(0.5),
@@ -95,8 +95,9 @@ class _MainScreenState extends BaseState<MainScreen>
                           size: 14,
                         ),
                       )),
-                  label: "سجل الفواتر"),
-              BottomNavigationBarItem(
+                  label: "سجل الفواتر",
+                ),
+                BottomNavigationBarItem(
                   icon: Container(
                       decoration: BoxDecoration(
                         color: ColorSchemes.gray.withOpacity(0.5),
@@ -110,30 +111,60 @@ class _MainScreenState extends BaseState<MainScreen>
                           size: 14,
                         ),
                       )),
-                  label: "اضافة فاتورة"),
-            ],
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-             selectedItemColor: ColorSchemes.white,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _selectedIndex,
-             unselectedItemColor: ColorSchemes.white,
-            backgroundColor: ColorSchemes.primary,
-            unselectedLabelStyle: Theme
-                .of(context)
-                .textTheme
-                .labelLarge!
-                .copyWith(color: ColorSchemes.white),
-            selectedLabelStyle: Theme
-                .of(context)
-                .textTheme
-                .labelLarge!
-                .copyWith(color: ColorSchemes.white),
-            onTap: (index) => setState(() => _onItemTapped(index)),
+                  label: "اضافة فاتورة",
+                ),
+              ],
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              selectedItemColor: ColorSchemes.white,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: _selectedIndex,
+              unselectedItemColor: ColorSchemes.white,
+              backgroundColor: ColorSchemes.primary,
+              unselectedLabelStyle: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: ColorSchemes.white),
+              selectedLabelStyle: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: ColorSchemes.white),
+              onTap: (index) => setState(() => _onItemTapped(index)),
+            ),
           ),
         ),
-    )
-    ,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        child: Container(
+          padding: const EdgeInsets.all(1),
+          decoration: const BoxDecoration(
+            color: ColorSchemes.white,
+            shape: BoxShape.circle,
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: ColorSchemes.primary,
+              shape: BoxShape.circle,
+            ),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: ColorSchemes.white,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.add,
+                color: ColorSchemes.primary,
+                size: 24,
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -144,15 +175,15 @@ class _MainScreenState extends BaseState<MainScreen>
     });
   }
 
-  void _showMassageDialogWidget(String text,
-      String icon,) {
+  void _showMassageDialogWidget(
+    String text,
+    String icon,
+  ) {
     showMassageDialogWidget(
       context: context,
       text: text,
       icon: icon,
-      buttonText: S
-          .of(context)
-          .ok,
+      buttonText: S.of(context).ok,
       onTap: () {
         Navigator.pop(context);
       },
