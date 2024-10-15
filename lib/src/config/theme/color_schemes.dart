@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ColorSchemes {
-  static Color primary = const Color.fromRGBO(43, 54, 149, 1);
+  static Color primary = const Color.fromRGBO(65, 91, 231, 1);
+
+
+
   static const Color secondary = Color.fromRGBO(243, 154, 74, 1);
 
   static const Color black = Color.fromRGBO(34, 34, 34, 1);
@@ -31,10 +34,10 @@ class ColorSchemes {
   static const Color blueTest = Color.fromRGBO(110, 15, 245, 1);
   static const Color greyDivider = Color.fromRGBO(199, 196, 204, 1);
   static const Color installmentsCardHeaderColor =
-      Color.fromRGBO(0, 175, 70, 0.08);
+  Color.fromRGBO(0, 175, 70, 0.08);
   static const Color blueDivider = Color.fromRGBO(192, 148, 255, 1);
   static const Color unSeenNotificationBackground =
-      Color.fromRGBO(242, 240, 245, 1);
+  Color.fromRGBO(242, 240, 245, 1);
   static const Color notificationBorder = Color.fromRGBO(199, 196, 204, 0.5);
   static const Color snackBarWarning = Color.fromRGBO(255, 246, 212, 1);
   static const Color snackBarInfo = Color.fromRGBO(210, 248, 250, 1);
@@ -46,7 +49,7 @@ class ColorSchemes {
   static const Color primaryOpacity04 = Color.fromRGBO(114, 16, 255, 0.04);
   static const Color primaryOpacity01 = Color.fromRGBO(114, 16, 255, 0.1);
   static const Color installmentsDividerColor =
-      Color.fromRGBO(192, 148, 255, 1);
+  Color.fromRGBO(192, 148, 255, 1);
   static const Color unAvailableTextColor = Color(0xFFDC3027);
   static const Color unAvailableBackgroundColor = Color(0xFFF2F0F5);
 }

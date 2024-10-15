@@ -6,6 +6,8 @@ import 'package:fatora/generated/l10n.dart';
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
 import 'package:fatora/src/core/utils/show_massage_dialog_widget.dart';
+import 'package:fatora/src/presentation/screens/add_fatora/add_fatora_screen.dart';
+import 'package:fatora/src/presentation/screens/history/history_screen.dart';
 
 // ignore: unnecessary_import
 import 'package:flutter/foundation.dart';
@@ -34,7 +36,10 @@ class MainScreen extends BaseStatefulWidget {
 class _MainScreenState extends BaseState<MainScreen>
     with WidgetsBindingObserver {
   int _selectedIndex = 0;
-  List<Widget> _pages = [];
+  List<Widget> _pages = [
+    const HistoryScreen(),
+    const AddFatoraScreen(),
+  ];
   List<BottomNavigationBarItem> _navigationItems = [];
 
   @override
@@ -67,574 +72,68 @@ class _MainScreenState extends BaseState<MainScreen>
   @override
   Widget baseBuild(BuildContext context) {
     return Scaffold(
-      body: _pages.isEmpty
-          ? SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        SkeletonAvatar(
-                          style: SkeletonAvatarStyle(
-                              height: 48,
-                              width: 48,
-                              borderRadius: BorderRadius.circular(16),
-                              shape: BoxShape.rectangle),
-                        ),
-                        const SizedBox(width: 12),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SkeletonLine(
-                              style: SkeletonLineStyle(
-                                height: 5,
-                                width: 50,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            SkeletonLine(
-                              style: SkeletonLineStyle(
-                                height: 5,
-                                width: 100,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Expanded(child: SizedBox()),
-                        SkeletonAvatar(
-                          style: SkeletonAvatarStyle(
-                              height: 40,
-                              width: 40,
-                              borderRadius: BorderRadius.circular(16),
-                              shape: BoxShape.circle),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 28),
-                    SkeletonAvatar(
-                      style: SkeletonAvatarStyle(
-                          height: 160,
-                          width: double.infinity,
-                          borderRadius: BorderRadius.circular(32),
-                          shape: BoxShape.rectangle),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SkeletonAvatar(
-                          style: SkeletonAvatarStyle(
-                              height: 8,
-                              width: 8,
-                              borderRadius: BorderRadius.circular(32),
-                              shape: BoxShape.circle),
-                        ),
-                        const SizedBox(width: 8),
-                        SkeletonAvatar(
-                          style: SkeletonAvatarStyle(
-                              height: 8,
-                              width: 8,
-                              borderRadius: BorderRadius.circular(32),
-                              shape: BoxShape.circle),
-                        ),
-                        const SizedBox(width: 8),
-                        SkeletonAvatar(
-                          style: SkeletonAvatarStyle(
-                              height: 8,
-                              width: 8,
-                              borderRadius: BorderRadius.circular(32),
-                              shape: BoxShape.circle),
-                        ),
-                        const SizedBox(width: 8),
-                        SkeletonAvatar(
-                          style: SkeletonAvatarStyle(
-                              height: 8,
-                              width: 8,
-                              borderRadius: BorderRadius.circular(32),
-                              shape: BoxShape.circle),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 28),
-                    Container(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(50)),
+        child: Container(
+          height: 75,
+          width: MediaQuery.of(context).size.width*0.7,
+          // margin: const EdgeInsets.symmetric(horizontal: 10),
+          child: BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(
+                  icon: Container(
                       decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        border: Border.all(
-                          color: ColorSchemes.borderGray,
-                          width: 1,
+                        color: ColorSchemes.gray.withOpacity(0.5),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.receipt,
+                          color: ColorSchemes.white,
+                          size: 14,
                         ),
+                      )),
+                  label: "سجل الفواتر"),
+              BottomNavigationBarItem(
+                  icon: Container(
+                      decoration: BoxDecoration(
+                        color: ColorSchemes.gray.withOpacity(0.5),
+                        shape: BoxShape.circle,
                       ),
-                      height: 111,
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SkeletonLine(
-                                  style: SkeletonLineStyle(
-                                    height: 10,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                SkeletonLine(
-                                  style: SkeletonLineStyle(
-                                    height: 8,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                SkeletonLine(
-                                  style: SkeletonLineStyle(
-                                    height: 8,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.3,
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SkeletonAvatar(
-                              style: SkeletonAvatarStyle(
-                                  height: 100,
-                                  width: 90,
-                                  borderRadius: BorderRadius.circular(22),
-                                  shape: BoxShape.rectangle),
-                            ),
-                          ],
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.add,
+                          color: ColorSchemes.white,
+                          size: 14,
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 33),
-                    SkeletonLine(
-                      style: SkeletonLineStyle(
-                        height: 10,
-                        width: 100,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SkeletonAvatar(
-                                    style: SkeletonAvatarStyle(
-                                        height: 50,
-                                        width: 50,
-                                        borderRadius: BorderRadius.circular(32),
-                                        shape: BoxShape.circle),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                      height: 8,
-                                      width: 50,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 14),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SkeletonAvatar(
-                                    style: SkeletonAvatarStyle(
-                                        height: 50,
-                                        width: 50,
-                                        borderRadius: BorderRadius.circular(32),
-                                        shape: BoxShape.circle),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                      height: 8,
-                                      width: 50,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 14),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SkeletonAvatar(
-                                    style: SkeletonAvatarStyle(
-                                        height: 50,
-                                        width: 50,
-                                        borderRadius: BorderRadius.circular(32),
-                                        shape: BoxShape.circle),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                      height: 8,
-                                      width: 50,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 14),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SkeletonAvatar(
-                                    style: SkeletonAvatarStyle(
-                                        height: 50,
-                                        width: 50,
-                                        borderRadius: BorderRadius.circular(32),
-                                        shape: BoxShape.circle),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                      height: 8,
-                                      width: 50,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 14),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SkeletonAvatar(
-                                    style: SkeletonAvatarStyle(
-                                        height: 50,
-                                        width: 50,
-                                        borderRadius: BorderRadius.circular(32),
-                                        shape: BoxShape.circle),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                      height: 8,
-                                      width: 50,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 14),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SkeletonAvatar(
-                                    style: SkeletonAvatarStyle(
-                                        height: 50,
-                                        width: 50,
-                                        borderRadius: BorderRadius.circular(32),
-                                        shape: BoxShape.circle),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                      height: 8,
-                                      width: 50,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 14),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SkeletonAvatar(
-                                    style: SkeletonAvatarStyle(
-                                        height: 50,
-                                        width: 50,
-                                        borderRadius: BorderRadius.circular(32),
-                                        shape: BoxShape.circle),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                      height: 8,
-                                      width: 50,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 14),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SkeletonAvatar(
-                                    style: SkeletonAvatarStyle(
-                                        height: 50,
-                                        width: 50,
-                                        borderRadius: BorderRadius.circular(32),
-                                        shape: BoxShape.circle),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                      height: 8,
-                                      width: 50,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(width: 14),
-                            ],
-                          ),
-                        )),
-                    const SizedBox(height: 33),
-                    SkeletonLine(
-                      style: SkeletonLineStyle(
-                        height: 10,
-                        width: 100,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 200,
-                            height: 200,
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(16),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                    blurRadius: 32,
-                                    offset: Offset(0, 4),
-                                    spreadRadius: 0,
-                                    color: Color.fromRGBO(0, 0, 0, 0.12))
-                              ],
-                              color: ColorSchemes.white,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      height: 70,
-                                      width: 70,
-                                      borderRadius: BorderRadius.circular(32),
-                                      shape: BoxShape.circle),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      height: 10,
-                                      width: 100,
-                                      borderRadius: BorderRadius.circular(32),
-                                      shape: BoxShape.rectangle),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      height: 10,
-                                      width: 150,
-                                      borderRadius: BorderRadius.circular(32),
-                                      shape: BoxShape.rectangle),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            height: 200,
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(16),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                    blurRadius: 32,
-                                    offset: Offset(0, 4),
-                                    spreadRadius: 0,
-                                    color: Color.fromRGBO(0, 0, 0, 0.12))
-                              ],
-                              color: ColorSchemes.white,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      height: 70,
-                                      width: 70,
-                                      borderRadius: BorderRadius.circular(32),
-                                      shape: BoxShape.circle),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      height: 10,
-                                      width: 100,
-                                      borderRadius: BorderRadius.circular(32),
-                                      shape: BoxShape.rectangle),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      height: 10,
-                                      width: 150,
-                                      borderRadius: BorderRadius.circular(32),
-                                      shape: BoxShape.rectangle),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            height: 200,
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(16),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                    blurRadius: 32,
-                                    offset: Offset(0, 4),
-                                    spreadRadius: 0,
-                                    color: Color.fromRGBO(0, 0, 0, 0.12))
-                              ],
-                              color: ColorSchemes.white,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      height: 70,
-                                      width: 70,
-                                      borderRadius: BorderRadius.circular(32),
-                                      shape: BoxShape.circle),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      height: 10,
-                                      width: 100,
-                                      borderRadius: BorderRadius.circular(32),
-                                      shape: BoxShape.rectangle),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      height: 10,
-                                      width: 150,
-                                      borderRadius: BorderRadius.circular(32),
-                                      shape: BoxShape.rectangle),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : _pages[_selectedIndex],
-      bottomNavigationBar: _pages.isEmpty
-          ? Container(
-              height: 20,
-            )
-          : Container(
-              decoration: BoxDecoration(
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.grey.shade300,
-                    blurRadius: 20,
-                    offset: const Offset(0, -4),
-                  ),
-                ],
-              ),
-              child: WillPopScope(
-                onWillPop: () {
-                  return Future.value(true);
-                },
-                child: BottomNavigationBar(
-                  items: _navigationItems,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  selectedItemColor: ColorSchemes.primary,
-                  type: BottomNavigationBarType.fixed,
-                  currentIndex: _selectedIndex,
-                  unselectedItemColor: ColorSchemes.gray,
-                  backgroundColor: ColorSchemes.white,
-                  unselectedLabelStyle: Theme.of(context)
-                      .textTheme
-                      .labelLarge!
-                      .copyWith(color: ColorSchemes.primary),
-                  selectedLabelStyle: Theme.of(context)
-                      .textTheme
-                      .labelLarge!
-                      .copyWith(color: ColorSchemes.primary),
-                  onTap: (index) => setState(() => _onItemTapped(index)),
-                ),
-              ),
-            ),
+                      )),
+                  label: "اضافة فاتورة"),
+            ],
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+             selectedItemColor: ColorSchemes.white,
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _selectedIndex,
+             unselectedItemColor: ColorSchemes.white,
+            backgroundColor: ColorSchemes.primary,
+            unselectedLabelStyle: Theme
+                .of(context)
+                .textTheme
+                .labelLarge!
+                .copyWith(color: ColorSchemes.white),
+            selectedLabelStyle: Theme
+                .of(context)
+                .textTheme
+                .labelLarge!
+                .copyWith(color: ColorSchemes.white),
+            onTap: (index) => setState(() => _onItemTapped(index)),
+          ),
+        ),
+    )
+    ,
     );
   }
 
@@ -645,36 +144,15 @@ class _MainScreenState extends BaseState<MainScreen>
     });
   }
 
-  BottomNavigationBarItem _item({
-    required String label,
-    required String iconSelected,
-    required String iconUnSelected,
-  }) {
-    return BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.all(2),
-        child: SvgPicture.asset(iconUnSelected),
-      ),
-      label: label,
-      activeIcon: Padding(
-        padding: const EdgeInsets.all(2),
-        child: SvgPicture.asset(
-          iconSelected,
-          color: ColorSchemes.primary,
-        ),
-      ),
-    );
-  }
-
-  void _showMassageDialogWidget(
-    String text,
-    String icon,
-  ) {
+  void _showMassageDialogWidget(String text,
+      String icon,) {
     showMassageDialogWidget(
       context: context,
       text: text,
       icon: icon,
-      buttonText: S.of(context).ok,
+      buttonText: S
+          .of(context)
+          .ok,
       onTap: () {
         Navigator.pop(context);
       },

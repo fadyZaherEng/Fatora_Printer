@@ -30,29 +30,26 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [],
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        navigatorObservers: [
-          ChuckerFlutter.navigatorObserver,
-          routeObserver,
-        ],
-        themeMode: ThemeMode.light,
-        supportedLocales: S.delegate.supportedLocales,
-        onGenerateRoute: RoutesManager.getRoute,
-        initialRoute: Routes.splash,
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        debugShowCheckedModeBanner: false,
-        title: 'Fatora',
-        // theme: AppTheme(state.languageCode).light,
-        // locale: state,
-      ),
+    return MaterialApp(
+      navigatorKey: navigatorKey,
+      navigatorObservers: [
+        ChuckerFlutter.navigatorObserver,
+        routeObserver,
+      ],
+      themeMode: ThemeMode.light,
+      supportedLocales: S.delegate.supportedLocales,
+      onGenerateRoute: RoutesManager.getRoute,
+      initialRoute: Routes.splash,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      debugShowCheckedModeBanner: false,
+      title: 'Fatora',
+      // theme: AppTheme(state.languageCode).light,
+      // locale: state,
     );
   }
 }
