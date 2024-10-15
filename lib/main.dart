@@ -53,3 +53,23 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+//sqflite using
+// DatabaseHelper dbHelper = DatabaseHelper();
+//
+// // Insert a new user
+// await dbHelper.insertUser(User(name: 'John Doe', age: 25));
+//
+// // Get all users
+// List<User> users = await dbHelper.getUsers();
+// print('All Users: $users');
+//
+// // Update a user
+// User updatedUser = users.first;
+// updatedUser.name = 'John Smith';
+// await dbHelper.updateUser(updatedUser);
+//
+// // Delete a user
+// await dbHelper.deleteUser(updatedUser.id!);
+//
+// // Close the database
+// await dbHelper.close();
