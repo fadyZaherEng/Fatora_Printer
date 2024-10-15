@@ -1,0 +1,110 @@
+import 'package:city_eye/src/data/repositories/badge_identity_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/community_request_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/complain_list_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/complain_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/contact_us_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/delegated_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/events_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/facilities_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/home_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/landing_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/login_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/notification_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/payment_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/profile_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/qr_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/register_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/reset_password_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/service_details_cart_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/settings_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/support_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/surveys_repository_implementation.dart';
+import 'package:city_eye/src/data/repositories/wall_repository_implementation.dart';
+import 'package:city_eye/src/di/injector.dart';
+import 'package:city_eye/src/domain/repositories/badge_identity_repository.dart';
+import 'package:city_eye/src/domain/repositories/community_request_repository.dart';
+import 'package:city_eye/src/domain/repositories/complain_list_repository.dart';
+import 'package:city_eye/src/domain/repositories/complain_repository.dart';
+import 'package:city_eye/src/domain/repositories/contact_us_repository.dart';
+import 'package:city_eye/src/domain/repositories/delegated_repository.dart';
+import 'package:city_eye/src/domain/repositories/events_repository.dart';
+import 'package:city_eye/src/domain/repositories/facilities_repository.dart';
+import 'package:city_eye/src/domain/repositories/home_repository.dart';
+import 'package:city_eye/src/domain/repositories/landing_repository.dart';
+import 'package:city_eye/src/domain/repositories/login_repository.dart';
+import 'package:city_eye/src/domain/repositories/notification_repository.dart';
+import 'package:city_eye/src/domain/repositories/payment_repository.dart';
+import 'package:city_eye/src/domain/repositories/profile_repository.dart';
+import 'package:city_eye/src/domain/repositories/qr_repository.dart';
+import 'package:city_eye/src/domain/repositories/register_repository.dart';
+import 'package:city_eye/src/domain/repositories/reset_password_repository.dart';
+import 'package:city_eye/src/domain/repositories/service_details_cart_repository.dart';
+import 'package:city_eye/src/domain/repositories/settings_repository.dart';
+import 'package:city_eye/src/domain/repositories/support_repository.dart';
+import 'package:city_eye/src/domain/repositories/surveys_repository.dart';
+import 'package:city_eye/src/domain/repositories/wall_repository.dart';
+
+Future<void> initializeRepositoryDependencies() async {
+  injector.registerFactory<LoginRepository>(
+      () => LoginRepositoryImplementation(injector()));
+
+  injector.registerFactory<SettingsRepository>(
+      () => SettingsRepositoryImplementation(injector()));
+
+  injector.registerFactory<RegisterRepository>(
+      () => RegisterRepositoryImplementation(injector()));
+
+  injector.registerFactory<ProfileRepository>(
+      () => ProfileRepositoryImplementation(injector()));
+
+  injector.registerFactory<HomeRepository>(
+      () => HomeRepositoryImplementation(injector()));
+
+  injector.registerFactory<ContactUsRepository>(
+      () => ContactUsRepositoryImplementation(injector()));
+
+  injector.registerFactory<PaymentRepository>(
+      () => PaymentRepositoryImplementation(injector()));
+
+  injector.registerFactory<WallRepository>(
+      () => WallRepositoryImplementation(injector()));
+  injector.registerFactory<ServiceDetailsCartRepository>(
+      () => ServiceDetailsCartRepositoryImplementation(injector()));
+
+  injector.registerFactory<LandingRepository>(
+      () => LandingRepositoryImplementation(injector()));
+
+  injector.registerFactory<EventsRepository>(
+      () => EventsRepositoryImplementation(injector()));
+
+  injector.registerFactory<SurveysRepository>(
+      () => SurveysRepositoryImplementation(injector()));
+
+  injector.registerFactory<SupportRepository>(
+      () => SupportRepositoryImplementation(injector()));
+
+  injector.registerFactory<QrRepository>(
+      () => QrRepositoryImplementation(injector()));
+
+  injector.registerFactory<DelegatedRepository>(
+      () => DelegatedRepositoryImplementation(injector()));
+
+  injector.registerFactory<NotificationRepository>(
+      () => NotificationRepositoryImplementation(injector()));
+
+  injector.registerFactory<CommunityRequestRepository>(
+      () => CommunityRequestRepositoryImplementation(injector()));
+
+  injector.registerFactory<ComplainRepository>(
+      () => ComplainRepositoryImplementation(injector()));
+
+  injector.registerFactory<ResetPasswordRepository>(
+      () => ResetPasswordRepositoryImplementation(injector()));
+
+  injector.registerFactory<BadgeIdentityRepository>(
+      () => BadgeIdentityRepositoryImplementation(injector()));
+  injector.registerFactory<ComplainListRepository>(
+      () => ComplainListRepositoryImplementation(injector()));
+  injector.registerFactory<FacilitiesRepository>(
+      () => FacilitiesRepositoryImplementation(injector()));
+}
