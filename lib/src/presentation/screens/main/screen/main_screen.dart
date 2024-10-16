@@ -1,10 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:fatora/generated/l10n.dart';
 import 'package:fatora/src/config/routes/routes_manager.dart';
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
-import 'package:fatora/src/core/utils/show_massage_dialog_widget.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/screens/history/history_screen.dart';
 import 'package:fatora/src/presentation/screens/print_fatora/print_fatora_screen.dart';
