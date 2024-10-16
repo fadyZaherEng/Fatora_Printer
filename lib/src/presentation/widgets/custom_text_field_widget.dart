@@ -1,118 +1,81 @@
-
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 // ignore: must_be_immutable
 class CustomTextFieldWidget extends StatefulWidget {
-  final TextEditingController controller;
-  final String labelTitle;
-  final String? errorMessage;
-  final double? height;
-  final Function(String) onChange;
-  final Function(String)? onSubmitted;
-  final FocusNode? focusNode;
-  final TextInputType textInputType;
-  final TextAlignVertical? textAlignVertical;
-  final List<TextInputFormatter>? inputFormatters;
-  final bool isReadOnly;
-  final Color textColor;
+  final String hintText;
+  final TextInputType? keyboardType;
+  final TextEditingController textEditingController;
+  final void Function(String) onChanged;
+  double height;
 
-  const CustomTextFieldWidget({
-    Key? key,
-    required this.controller,
-    required this.labelTitle,
-    required this.onChange,
-    this.errorMessage,
-    this.height = 1,
-    this.textInputType = TextInputType.text,
-    this.textAlignVertical,
-    this.inputFormatters,
-    this.isReadOnly = false,
-    this.textColor = ColorSchemes.black,
-    this.onSubmitted,
-    this.focusNode,
-  }) : super(key: key);
+  CustomTextFieldWidget({
+    super.key,
+    required this.hintText,
+    this.keyboardType,
+    required this.textEditingController,
+    this.height = 46,
+    required this.onChanged,
+  });
 
   @override
   State<CustomTextFieldWidget> createState() => _CustomTextFieldWidgetState();
 }
 
 class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
-  final FocusNode _focus = FocusNode();
-  bool _textFieldHasFocus = false;
-
-  @override
-  void initState() {
-    _focus.addListener(() {
-      setState(() {
-        _textFieldHasFocus = _focus.hasFocus;
-      });
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onTapOutside: (event) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      readOnly: widget.isReadOnly,
-      focusNode:widget.focusNode?? _focus,
-      textAlignVertical: widget.textAlignVertical,
-      keyboardType: widget.textInputType,
-      textInputAction: TextInputAction.done,
-      controller: widget.controller,
-      onSubmitted: widget.onSubmitted,
-      onChanged: widget.onChange,
-      inputFormatters: widget.inputFormatters,
-      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-          fontWeight: Constants.fontWeightRegular,
-          height: widget.height,
-          color: widget.textColor,
-          letterSpacing: -0.13),
-      decoration: InputDecoration(
+    return SizedBox(
+      height: widget.height,
+      child: TextFormField(
+        controller: widget.textEditingController,
+        keyboardType: widget.keyboardType,
+        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+            fontWeight: Constants.fontWeightRegular,
+            color: ColorSchemes.black,
+            letterSpacing: -0.13),
+        decoration: InputDecoration(
+          // border: InputBorder.none,
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromRGBO(122, 124, 135, 0.1),
+              width: 1.0,
+            ),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
           focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: ColorSchemes.border),
-              borderRadius: BorderRadius.circular(12)),
-          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: ColorSchemes.primary),
+          ),
+          border: OutlineInputBorder(
               borderSide: const BorderSide(color: ColorSchemes.border),
               borderRadius: BorderRadius.circular(12)),
           errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: ColorSchemes.redError),
               borderRadius: BorderRadius.circular(12)),
-          border: OutlineInputBorder(
-              borderSide: const BorderSide(color: ColorSchemes.border),
-              borderRadius: BorderRadius.circular(12)),
-          errorText: widget.errorMessage,
-          labelText: widget.labelTitle,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-          labelStyle: _labelStyle(context, _textFieldHasFocus),
-          errorMaxLines: 2),
+          prefixIcon: Container(
+            height: widget.height,
+            width: 50,
+            margin: const EdgeInsetsDirectional.only(end: 8.0),
+            alignment: Alignment.center,
+            color: ColorSchemes.iconBackGround,
+            child: Text(
+              widget.hintText,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: const Color.fromRGBO(83, 83, 83, 1),
+                    letterSpacing: -0.13,
+                  ),
+            ),
+          ),
+        ),
+        onChanged: (value) {
+          widget.onChanged(value);
+          print(value);
+        },
+      ),
     );
-  }
-
-  TextStyle _labelStyle(BuildContext context, bool hasFocus) {
-    if (hasFocus || widget.controller.text.isNotEmpty) {
-      return Theme.of(context).textTheme.titleLarge!.copyWith(
-            fontWeight: Constants.fontWeightRegular,
-            color: widget.errorMessage == null
-                ? ColorSchemes.gray
-                : ColorSchemes.redError,
-            letterSpacing: -0.13,
-          );
-    } else {
-      return Theme.of(context).textTheme.titleSmall!.copyWith(
-            fontWeight: Constants.fontWeightRegular,
-            color: widget.errorMessage == null
-                ? ColorSchemes.gray
-                : ColorSchemes.redError,
-            letterSpacing: -0.13,
-          );
-    }
   }
 
   @override

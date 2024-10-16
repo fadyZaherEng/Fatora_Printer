@@ -35,11 +35,16 @@ class _HistoryScreenState extends BaseState<HistoryScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomTextFiledFatoraWidget(
+                  CustomTextFiledFatoraWithListWidget(
                     hintText: "طرق الدفع",
                     textEditingController: _paymentController,
                     keyboardType: TextInputType.text,
-                    onSuffixTap: () {},
+                    onSuffixTap: (selectedValue) {
+                      setState(() {
+                        _paymentController.text = selectedValue;
+                      });
+                    },
+                    list: paymentOptions,
                   )
                 ],
               ),

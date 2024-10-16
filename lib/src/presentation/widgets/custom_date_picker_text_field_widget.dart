@@ -1,23 +1,33 @@
+import 'dart:io';
 
 import 'package:fatora/src/config/theme/color_schemes.dart';
+import 'package:fatora/src/core/resources/image_paths.dart';
+import 'package:fatora/src/core/utils/android_date_picker.dart';
 import 'package:fatora/src/core/utils/constants.dart';
+import 'package:fatora/src/core/utils/ios_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // ignore: must_be_immutable
 class CustomDatePickerTextFieldWidget extends StatefulWidget {
-  final TextEditingController controller;
-  final String labelTitle;
-  final String? errorMessage;
-  final void Function() onTap;
+  final String hintText;
+  final TextInputType? keyboardType;
+  final TextEditingController textEditingController;
+  final Function(String) pickDate;
+  final Function(TimeOfDay) selectTime;
+  final Function() deleteDate;
+  final bool isDatePicked;
 
   const CustomDatePickerTextFieldWidget({
-    Key? key,
-    required this.controller,
-    required this.labelTitle,
-    required this.onTap,
-    this.errorMessage,
-  }) : super(key: key);
+    super.key,
+    required this.hintText,
+    this.keyboardType,
+    required this.textEditingController,
+    required this.pickDate,
+    required this.deleteDate,
+    required this.isDatePicked,
+    required this.selectTime,
+  });
 
   @override
   State<CustomDatePickerTextFieldWidget> createState() =>
@@ -26,86 +36,158 @@ class CustomDatePickerTextFieldWidget extends StatefulWidget {
 
 class _CustomDatePickerTextFieldWidgetState
     extends State<CustomDatePickerTextFieldWidget> {
-  final FocusNode _focus = FocusNode();
-  bool _textFieldHasFocus = false;
+  DateTime? selectedDate;
+  TimeOfDay _selectedTime = TimeOfDay.now();
 
-  @override
-  void initState() {
-    _focus.addListener(() {
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
+    if (picked != null && picked != _selectedTime) {
       setState(() {
-        _textFieldHasFocus = _focus.hasFocus;
+        _selectedTime = picked;
+        widget.selectTime(_selectedTime);
+
       });
-    });
-    super.initState();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: widget.errorMessage == null ? 50 : 70,
-      child: TextField(
-        onTap: widget.onTap,
+      height: 46,
+      child: TextFormField(
+        controller: widget.textEditingController,
+        keyboardType: widget.keyboardType,
         readOnly: true,
-        focusNode: _focus,
-        textAlign: TextAlign.start,
-        textAlignVertical: TextAlignVertical.center,
-        controller: widget.controller,
         style: Theme.of(context).textTheme.titleSmall!.copyWith(
             fontWeight: Constants.fontWeightRegular,
             color: ColorSchemes.black,
             letterSpacing: -0.13),
         decoration: InputDecoration(
+          // border: InputBorder.none,
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromRGBO(122, 124, 135, 0.1),
+              width: 1.0,
+            ),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
           focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: ColorSchemes.border),
-              borderRadius: BorderRadius.circular(8)),
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: ColorSchemes.border),
-              borderRadius: BorderRadius.circular(8)),
-          errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: ColorSchemes.redError),
-              borderRadius: BorderRadius.circular(8)),
+            borderSide: BorderSide(color: ColorSchemes.primary),
+          ),
           border: OutlineInputBorder(
               borderSide: const BorderSide(color: ColorSchemes.border),
-              borderRadius: BorderRadius.circular(8)),
-          labelText: widget.labelTitle,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          labelStyle: _labelStyle(context, _textFieldHasFocus),
-          errorMaxLines: 2,
-          errorText: widget.errorMessage,
-          suffixIcon: SvgPicture.asset(
-            "ImagePaths.timeWork1",
-            fit: BoxFit.scaleDown,
-            matchTextDirection: true,
+              borderRadius: BorderRadius.circular(12)),
+          errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: ColorSchemes.redError),
+              borderRadius: BorderRadius.circular(12)),
+          suffixIcon: widget.isDatePicked && selectedDate == null
+              ? InkWell(
+                  onTap: () {
+                    selectDate();
+                  },
+                  child: SvgPicture.asset(
+                    ImagePaths.date,
+                    fit: BoxFit.scaleDown,
+                  ),
+                )
+              : widget.isDatePicked && selectedDate != null
+                  ? InkWell(
+                      onTap: () {
+                        widget.deleteDate();
+                        selectedDate = null;
+                        widget.textEditingController.text = "";
+                        setState(() {});
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: ColorSchemes.primary,
+                      ),
+                    )
+                  : !widget.isDatePicked && _selectedTime == TimeOfDay.now()
+                      ? InkWell(
+                          onTap: () {
+                            _selectTime(context);
+                          },
+                          child: SvgPicture.asset(
+                            ImagePaths.time,
+                            fit: BoxFit.scaleDown,
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            widget.deleteDate();
+                            _selectedTime = TimeOfDay.now();
+                            widget.textEditingController.text = "";
+                            setState(() {});
+                          },
+                          child: Icon(
+                            Icons.close,
+                            color: ColorSchemes.primary,
+                          ),
+                        ),
+          prefixIcon: Container(
+            height: 46,
+            width: 50,
+            margin: const EdgeInsetsDirectional.only(end: 8.0),
+            alignment: Alignment.center,
+            color: ColorSchemes.iconBackGround,
+            child: Text(
+              widget.hintText,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: const Color.fromRGBO(83, 83, 83, 1),
+                    letterSpacing: -0.13,
+                  ),
+            ),
           ),
         ),
+        onChanged: (value) {
+          print(value);
+        },
       ),
     );
   }
 
-  TextStyle _labelStyle(BuildContext context, bool hasFocus) {
-    if (hasFocus || widget.controller.text.isNotEmpty) {
-      return Theme.of(context).textTheme.titleLarge!.copyWith(
-            fontWeight: Constants.fontWeightRegular,
-            color: widget.errorMessage == null
-                ? ColorSchemes.gray
-                : ColorSchemes.redError,
-            letterSpacing: -0.13,
-          );
+  void selectDate() {
+    if (Platform.isAndroid) {
+      androidDatePicker(
+        context: context,
+        firstDate: DateTime(1900),
+        onSelectDate: (date) {
+          if (date == null) return;
+          widget.pickDate(date.toString().split(" ")[0]);
+          selectedDate = date;
+          setState(() {});
+        },
+        selectedDate: selectedDate,
+      );
     } else {
-      return Theme.of(context).textTheme.titleSmall!.copyWith(
-            fontWeight: Constants.fontWeightRegular,
-            color: widget.errorMessage == null
-                ? ColorSchemes.gray
-                : ColorSchemes.redError,
-            letterSpacing: -0.13,
-          );
+      DateTime tempDate = selectedDate ?? DateTime.now();
+      iosDatePicker(
+        context: context,
+        selectedDate: selectedDate,
+        onChange: (date) {
+          tempDate = date;
+        },
+        onCancel: () {
+          Navigator.of(context).pop();
+        },
+        onDone: () {
+          selectedDate = tempDate;
+          widget.pickDate(selectedDate.toString().split(" ")[0]);
+          Navigator.of(context).pop();
+          setState(() {});
+        },
+      );
     }
   }
 
   @override
   void deactivate() {
-    _focus.dispose();
     super.deactivate();
   }
 }

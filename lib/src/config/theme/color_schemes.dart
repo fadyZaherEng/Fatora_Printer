@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ColorSchemes {
   static Color primary = const Color.fromRGBO(65, 91, 231, 1);
-  static Color iconBackGround = const Color.fromRGBO(76, 100, 232, 1);
+  static Color iconBackGround = const Color.fromRGBO(232, 239, 251, 1);
 
 
 
