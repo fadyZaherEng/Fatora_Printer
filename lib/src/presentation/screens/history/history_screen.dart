@@ -161,8 +161,11 @@ class _HistoryScreenState extends BaseState<HistoryScreen> {
                   onTap: (fatora) {
                     Navigator.pushNamed(
                       context,
-                      Routes.printerFatora,
-                      arguments: fatora,
+                      Routes.main,
+                      arguments:{
+                        "selectIndex": 1,
+                        "fatora": fatora,
+                      }
                     );
                   },
                 ),

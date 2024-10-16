@@ -1,5 +1,6 @@
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
+import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/widgets/custom_button_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_date_picker_text_field_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_field_price_widget.dart';
@@ -36,6 +37,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
       TextEditingController();
   final TextEditingController _fatoraNumberTraderController =
       TextEditingController();
+  Fatora _fatora = Fatora();
 
   List<String> paymentOptions = [
     "QiCard",
@@ -230,7 +232,26 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                   const SizedBox(height: 40),
                   Center(
                     child: CustomButtonWidget(
-                      onTap: () {},
+                      onTap: () {
+                      //TODO: Add  data to fatora model
+                        _fatora = Fatora(
+                          date:storeDate,
+                          status: _fatoraStatusController.text,
+                          price: _fatoraPriceController.text,
+                          statusSuccess: _fatoraSuccessController.text,
+                          fatoraId: _fatoraIdController.text,
+                          numberArrived: _fatoraNumberArrivedController.text,
+                          numberMove: _fatoraNumberMoveController.text,
+                          deviceNumber: _fatoraNumberDeviceController.text,
+                          traderNumber: _fatoraNumberTraderController.text,
+                          name: _fatoraNameController.text,
+                          paymentMethod: _paymentController.text,
+                          time: _fatoraTimeController.text,
+                        );
+                        //Todo: Add Fatora in database
+
+                        Navigator.pop(context,_fatora);
+                      },
                       width: 190,
                       buttonBorderRadius: 34,
                       text: "أضافة فاتورة",

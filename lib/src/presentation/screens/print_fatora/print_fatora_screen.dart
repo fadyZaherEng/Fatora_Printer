@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:typed_data';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
@@ -16,7 +15,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:ui' as ui;
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
 class PrintFatoraScreen extends BaseStatefulWidget {
