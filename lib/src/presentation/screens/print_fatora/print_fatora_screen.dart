@@ -38,6 +38,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
   @override
   Widget baseBuild(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorSchemes.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -46,292 +47,301 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
               children: [
                 RepaintBoundary(
                   key: _globalKeyForPrint,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  child: Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            ImagePaths.log,
-                            width: 40,
-                            height: 30,
+                          const SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                ImagePaths.log,
+                                width: 40,
+                                height: 30,
+                              ),
+                              const SizedBox(width: 10),
+                              SvgPicture.asset(
+                                ImagePaths.visa,
+                                width: 40,
+                                height: 35,
+                              ),
+                              const SizedBox(width: 10),
+                              SvgPicture.asset(
+                                ImagePaths.master,
+                                width: 40,
+                                height: 35,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 10),
-                          SvgPicture.asset(
-                            ImagePaths.visa,
-                            width: 40,
-                            height: 35,
+                          const SizedBox(height: 15),
+                          Text(
+                            widget.fatora.paymentMethod,
+                            style:
+                                Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      color: ColorSchemes.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                           ),
-                          const SizedBox(width: 10),
-                          SvgPicture.asset(
-                            ImagePaths.master,
-                            width: 40,
-                            height: 35,
+                          const SizedBox(height: 10),
+                          Text(
+                            widget.fatora.name,
+                            style:
+                                Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      color: ColorSchemes.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                           ),
+                          const SizedBox(height: 15),
+                          Text(
+                            "شحن بطاقة",
+                            style:
+                                Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      color: ColorSchemes.black,
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                          const SizedBox(height: 10),
+                          // SvgPicture.asset(
+                          //   ImagePaths.group,
+                          //   width: MediaQuery.of(context).size.width,
+                          //   height: 5,
+                          //   fit: BoxFit.fitWidth,
+                          // ),
+                          _buildArrowWidget(),
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              children: [
+                                Text(widget.fatora.date,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: ColorSchemes.black,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                        )),
+                                const Spacer(),
+                                Text(widget.fatora.time,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: ColorSchemes.black,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                        )),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          // SvgPicture.asset(
+                          //   ImagePaths.group,
+                          //   width: MediaQuery.of(context).size.width,
+                          //   height: 5,
+                          //   fit: BoxFit.fitWidth,
+                          // ),
+                          _buildArrowWidget(),
+                          const SizedBox(height: 15),
+                          Text(
+                            widget.fatora.status,
+                            style:
+                                Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      color: ColorSchemes.black,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "المبلغ",
+                            style:
+                                Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      color: ColorSchemes.black,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            widget.fatora.price,
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: ColorSchemes.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            widget.fatora.statusSuccess,
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: ColorSchemes.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "بطاقة المستلم",
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: ColorSchemes.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          ),
+                          const SizedBox(height: 10),
+                          Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  widget.fatora.fatoraId.substring(0, 4),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: ColorSchemes.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                ),
+                                Text(
+                                  "XXXXXXXX",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: ColorSchemes.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                ),
+                                Text(
+                                  //get last 4 digits sorted from right to left
+                                  widget.fatora.fatoraId.substring(
+                                      widget.fatora.fatoraId.length - 4,
+                                      widget.fatora.fatoraId.length),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: ColorSchemes.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  widget.fatora.fatoraId.substring(0, 4),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: ColorSchemes.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                ),
+                                Text(
+                                  "XXXXXXXX",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: ColorSchemes.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                ),
+                                Text(
+                                  //get last 4 digits sorted from right to left
+                                  widget.fatora.fatoraId.substring(
+                                      widget.fatora.fatoraId.length - 4,
+                                      widget.fatora.fatoraId.length),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: ColorSchemes.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            widget.fatora.name,
+                            style:
+                                Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      color: ColorSchemes.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                          ),
+                          const SizedBox(height: 10),
+                          // SvgPicture.asset(
+                          //   ImagePaths.group,
+                          //   width: MediaQuery.of(context).size.width,
+                          //   height: 5,
+                          //   fit: BoxFit.fitWidth,
+                          // ),
+                          _buildArrowWidget(),
+                          const SizedBox(height: 10),
+                          //add some space
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildItemNumber(
+                                        "رقم الايصال", widget.fatora.numberArrived),
+                                    const SizedBox(height: 10),
+                                    _buildItemNumber(
+                                        "رقم الحركة", widget.fatora.numberMove),
+                                    const SizedBox(height: 10),
+                                    _buildItemNumber(
+                                        "رقم الجهاز", widget.fatora.deviceNumber),
+                                    const SizedBox(height: 10),
+                                    _buildItemNumber(
+                                        "رقم التاجر", widget.fatora.traderNumber),
+                                    const SizedBox(height: 10),
+                                  ]),
+                            ),
+                          ),
+                          // SvgPicture.asset(
+                          //   ImagePaths.group,
+                          //   width: MediaQuery.of(context).size.width,
+                          //   height: 5,
+                          //   fit: BoxFit.fitWidth,
+                          // ),
+                          _buildArrowWidget(),
+                          const SizedBox(height: 10),
                         ],
                       ),
-                      const SizedBox(height: 15),
-                      Text(
-                        widget.fatora.paymentMethod,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: ColorSchemes.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        widget.fatora.name,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: ColorSchemes.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        "شحن بطاقة",
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: ColorSchemes.black,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                      const SizedBox(height: 10),
-                      // SvgPicture.asset(
-                      //   ImagePaths.group,
-                      //   width: MediaQuery.of(context).size.width,
-                      //   height: 5,
-                      //   fit: BoxFit.fitWidth,
-                      // ),
-                      _buildArrowWidget(),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Row(
-                          children: [
-                            Text(widget.fatora.date,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: ColorSchemes.black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                    )),
-                            const Spacer(),
-                            Text(widget.fatora.time,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: ColorSchemes.black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                    )),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      // SvgPicture.asset(
-                      //   ImagePaths.group,
-                      //   width: MediaQuery.of(context).size.width,
-                      //   height: 5,
-                      //   fit: BoxFit.fitWidth,
-                      // ),
-                      _buildArrowWidget(),
-                      const SizedBox(height: 15),
-                      Text(
-                        widget.fatora.status,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: ColorSchemes.black,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        "المبلغ",
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: ColorSchemes.black,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        widget.fatora.price,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: ColorSchemes.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        widget.fatora.statusSuccess,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: ColorSchemes.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        "بطاقة المستلم",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: ColorSchemes.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                      ),
-                      const SizedBox(height: 10),
-                      Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.fatora.fatoraId.substring(0, 4),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: ColorSchemes.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                            ),
-                            Text(
-                              "XXXXXXXX",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: ColorSchemes.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                            ),
-                            Text(
-                              //get last 4 digits sorted from right to left
-                              widget.fatora.fatoraId.substring(
-                                  widget.fatora.fatoraId.length - 4,
-                                  widget.fatora.fatoraId.length),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: ColorSchemes.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.fatora.fatoraId.substring(0, 4),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: ColorSchemes.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                            ),
-                            Text(
-                              "XXXXXXXX",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: ColorSchemes.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                            ),
-                            Text(
-                              //get last 4 digits sorted from right to left
-                              widget.fatora.fatoraId.substring(
-                                  widget.fatora.fatoraId.length - 4,
-                                  widget.fatora.fatoraId.length),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: ColorSchemes.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        widget.fatora.name,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: ColorSchemes.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                      ),
-                      const SizedBox(height: 10),
-                      // SvgPicture.asset(
-                      //   ImagePaths.group,
-                      //   width: MediaQuery.of(context).size.width,
-                      //   height: 5,
-                      //   fit: BoxFit.fitWidth,
-                      // ),
-                      _buildArrowWidget(),
-                      const SizedBox(height: 10),
-                      //add some space
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildItemNumber(
-                                  "رقم الايصال", widget.fatora.numberArrived),
-                              const SizedBox(height: 10),
-                              _buildItemNumber(
-                                  "رقم الحركة", widget.fatora.numberMove),
-                              const SizedBox(height: 10),
-                              _buildItemNumber(
-                                  "رقم الجهاز", widget.fatora.deviceNumber),
-                              const SizedBox(height: 10),
-                              _buildItemNumber(
-                                  "رقم التاجر", widget.fatora.traderNumber),
-                              const SizedBox(height: 10),
-                            ]),
-                      ),
-                      // SvgPicture.asset(
-                      //   ImagePaths.group,
-                      //   width: MediaQuery.of(context).size.width,
-                      //   height: 5,
-                      //   fit: BoxFit.fitWidth,
-                      // ),
-                      _buildArrowWidget(),
-                      const SizedBox(height: 10),
-                    ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -361,12 +371,12 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                // Display the captured image here, if available
-                _imageBytes != null
-                    ? Image.memory(
-                        _imageBytes!) // Display the image using Image.memory
-                    : Text('Captured image will appear here'),
-                // Placeholder text
+                // // Display the captured image here, if available
+                // _imageBytes != null
+                //     ? Image.memory(
+                //         _imageBytes!) // Display the image using Image.memory
+                //     : Text('Captured image will appear here'),
+                // // Placeholder text
               ],
             ),
           ),
@@ -443,6 +453,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
 
   // Function to capture the widget as an image
   Future<void> _captureAndSaveImage() async {
+    // Delay capture until the widget has fully rendered
+    await Future.delayed(Duration(milliseconds: 300));
     try {
       // Request permissions (for mobile platforms)
       if (await PermissionServiceHandler().handleServicePermission(
@@ -467,7 +479,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         // File imgFile = File('$directory/screenshot.png');
         // await imgFile.writeAsBytes(pngBytes);
         // Save the image to the gallery using ImageGallerySaver
-        final result = await ImageGallerySaver.saveImage(pngBytes);
+        final result = await ImageGallerySaver.saveImage(pngBytes,quality: 100);
         print(result); // Prints the saved path in the gallery
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
