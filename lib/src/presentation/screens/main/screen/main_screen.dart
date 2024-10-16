@@ -1,33 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:async';
-
 import 'package:fatora/generated/l10n.dart';
+import 'package:fatora/src/config/routes/routes_manager.dart';
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
 import 'package:fatora/src/core/utils/show_massage_dialog_widget.dart';
-import 'package:fatora/src/presentation/screens/add_fatora/add_fatora_screen.dart';
+import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/screens/history/history_screen.dart';
+import 'package:fatora/src/presentation/screens/print_fatora/print_fatora_screen.dart';
 
 // ignore: unnecessary_import
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:skeletons/skeletons.dart';
 
 class MainScreen extends BaseStatefulWidget {
   final int selectIndex;
-  final bool? isFromDeepLink;
-  final String inviterName;
-  final String unitName;
+  final Fatora? fatora;
 
   const MainScreen({
     this.selectIndex = 0,
-    this.isFromDeepLink = false,
-    this.inviterName = "",
-    this.unitName = "",
-    Key? key,
-  }) : super(key: key);
+    this.fatora ,
+    super.key,
+  });
 
   @override
   BaseState<BaseStatefulWidget> baseCreateState() => _MainScreenState();
@@ -36,38 +29,24 @@ class MainScreen extends BaseStatefulWidget {
 class _MainScreenState extends BaseState<MainScreen>
     with WidgetsBindingObserver {
   int _selectedIndex = 0;
+  Fatora? _fatora ;
   List<Widget> _pages = [
     const HistoryScreen(),
-    const AddFatoraScreen(),
+    const PrintFatoraScreen(fatora: Fatora()),
   ];
-  List<BottomNavigationBarItem> _navigationItems = [];
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     _selectedIndex = widget.selectIndex;
     super.initState();
+    _fatora = widget.fatora;
+    _pages = [
+      const HistoryScreen(),
+      PrintFatoraScreen(fatora: _fatora),
+    ];
   }
 
-  @override
-  void didUpdateWidget(covariant MainScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-  }
-
-  bool isShake(List<double> values) {
-    const double shakeThreshold = 30;
-
-    double acceleration = values.reduce((sum, value) => sum + value.abs());
-
-    return acceleration > shakeThreshold;
-  }
 
   @override
   Widget baseBuild(BuildContext context) {
@@ -75,7 +54,7 @@ class _MainScreenState extends BaseState<MainScreen>
       resizeToAvoidBottomInset: false,
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.symmetric(horizontal:  10),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(50)),
           child: SizedBox(
@@ -107,12 +86,12 @@ class _MainScreenState extends BaseState<MainScreen>
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Icon(
-                          Icons.add,
+                          Icons.print,
                           color: ColorSchemes.white,
                           size: 14,
                         ),
                       )),
-                  label: "اضافة فاتورة",
+                  label: "طباعة فاتورة",
                 ),
               ],
               showSelectedLabels: true,
@@ -136,7 +115,20 @@ class _MainScreenState extends BaseState<MainScreen>
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.addFatora).then((value) {
+            if (value != null) {
+              _fatora = value as Fatora;
+              _pages = [
+                const HistoryScreen(),
+                 PrintFatoraScreen(fatora: _fatora),
+              ];
+              setState(() {
+                _selectedIndex = 1;
+              });
+            }
+          });
+        },
         backgroundColor: Colors.transparent,
         elevation: 0,
         child: Container(
@@ -176,18 +168,4 @@ class _MainScreenState extends BaseState<MainScreen>
     });
   }
 
-  void _showMassageDialogWidget(
-    String text,
-    String icon,
-  ) {
-    showMassageDialogWidget(
-      context: context,
-      text: text,
-      icon: icon,
-      buttonText: S.of(context).ok,
-      onTap: () {
-        Navigator.pop(context);
-      },
-    );
-  }
 }

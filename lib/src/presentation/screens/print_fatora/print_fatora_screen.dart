@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:typed_data';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
@@ -16,11 +15,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:ui' as ui;
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
 class PrintFatoraScreen extends BaseStatefulWidget {
-  final Fatora fatora;
+  final Fatora? fatora;
 
   const PrintFatoraScreen({
     super.key,
@@ -37,6 +35,19 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
 
   @override
   Widget baseBuild(BuildContext context) {
+    if (widget.fatora == null) {
+      return Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: Text(
+              "لا يوجد فاتورة من فضلك اختار فاتورة من سجل الفواتير \n او قم باضافة فاتورة جديدة",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: ColorSchemes.white,
       body: SafeArea(
@@ -80,33 +91,39 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           ),
                           const SizedBox(height: 15),
                           Text(
-                            widget.fatora.paymentMethod,
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      color: ColorSchemes.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                            widget.fatora!.paymentMethod,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: ColorSchemes.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            widget.fatora.name,
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      color: ColorSchemes.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                            widget.fatora!.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: ColorSchemes.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
                           const SizedBox(height: 15),
                           Text(
                             "شحن بطاقة",
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      color: ColorSchemes.black,
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: ColorSchemes.black,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                           const SizedBox(height: 10),
                           // SvgPicture.asset(
@@ -121,7 +138,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: Row(
                               children: [
-                                Text(widget.fatora.date,
+                                Text(widget.fatora!.date,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
@@ -131,7 +148,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                                           fontWeight: FontWeight.w400,
                                         )),
                                 const Spacer(),
-                                Text(widget.fatora.time,
+                                Text(widget.fatora!.time,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
@@ -153,28 +170,35 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           _buildArrowWidget(),
                           const SizedBox(height: 15),
                           Text(
-                            widget.fatora.status,
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      color: ColorSchemes.black,
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            widget.fatora!.status,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: ColorSchemes.black,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                           const SizedBox(height: 10),
                           Text(
                             "المبلغ",
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      color: ColorSchemes.black,
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: ColorSchemes.black,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            widget.fatora.price,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            widget.fatora!.price,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: ColorSchemes.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -182,8 +206,11 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            widget.fatora.statusSuccess,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            widget.fatora!.statusSuccess,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: ColorSchemes.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -192,7 +219,10 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           const SizedBox(height: 10),
                           Text(
                             "بطاقة المستلم",
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: ColorSchemes.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -205,7 +235,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  widget.fatora.fatoraId.substring(0, 4),
+                                  widget.fatora!.fatoraId.substring(0, 4),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -228,9 +258,9 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                                 ),
                                 Text(
                                   //get last 4 digits sorted from right to left
-                                  widget.fatora.fatoraId.substring(
-                                      widget.fatora.fatoraId.length - 4,
-                                      widget.fatora.fatoraId.length),
+                                  widget.fatora!.fatoraId.substring(
+                                      widget.fatora!.fatoraId.length - 4,
+                                      widget.fatora!.fatoraId.length),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -250,7 +280,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  widget.fatora.fatoraId.substring(0, 4),
+                                  widget.fatora!.fatoraId.substring(0, 4),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -273,9 +303,9 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                                 ),
                                 Text(
                                   //get last 4 digits sorted from right to left
-                                  widget.fatora.fatoraId.substring(
-                                      widget.fatora.fatoraId.length - 4,
-                                      widget.fatora.fatoraId.length),
+                                  widget.fatora!.fatoraId.substring(
+                                      widget.fatora!.fatoraId.length - 4,
+                                      widget.fatora!.fatoraId.length),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -290,13 +320,15 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            widget.fatora.name,
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      color: ColorSchemes.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                            widget.fatora!.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: ColorSchemes.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
                           const SizedBox(height: 10),
                           // SvgPicture.asset(
@@ -311,22 +343,23 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                               child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _buildItemNumber(
-                                        "رقم الايصال", widget.fatora.numberArrived),
+                                    _buildItemNumber("رقم الايصال",
+                                        widget.fatora!.numberArrived),
                                     const SizedBox(height: 10),
-                                    _buildItemNumber(
-                                        "رقم الحركة", widget.fatora.numberMove),
+                                    _buildItemNumber("رقم الحركة",
+                                        widget.fatora!.numberMove),
                                     const SizedBox(height: 10),
-                                    _buildItemNumber(
-                                        "رقم الجهاز", widget.fatora.deviceNumber),
+                                    _buildItemNumber("رقم الجهاز",
+                                        widget.fatora!.deviceNumber),
                                     const SizedBox(height: 10),
-                                    _buildItemNumber(
-                                        "رقم التاجر", widget.fatora.traderNumber),
+                                    _buildItemNumber("رقم التاجر",
+                                        widget.fatora!.traderNumber),
                                     const SizedBox(height: 10),
                                   ]),
                             ),
@@ -470,7 +503,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         Uint8List pngBytes = byteData!.buffer.asUint8List();
-      // Update the state with the captured image
+        // Update the state with the captured image
         setState(() {
           _imageBytes = pngBytes; // Set the image bytes to display later
         });
@@ -479,7 +512,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         // File imgFile = File('$directory/screenshot.png');
         // await imgFile.writeAsBytes(pngBytes);
         // Save the image to the gallery using ImageGallerySaver
-        final result = await ImageGallerySaver.saveImage(pngBytes,quality: 100);
+        final result =
+            await ImageGallerySaver.saveImage(pngBytes, quality: 100);
         print(result); // Prints the saved path in the gallery
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

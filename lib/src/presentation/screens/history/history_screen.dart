@@ -159,10 +159,13 @@ class _HistoryScreenState extends BaseState<HistoryScreen> {
                 FatoraTablesWidget(
                   groupedFatora: groupedFatoraList ?? {},
                   onTap: (fatora) {
-                    Navigator.pushNamed(
+                    Navigator.pushReplacementNamed(
                       context,
-                      Routes.printerFatora,
-                      arguments: fatora,
+                      Routes.main,
+                      arguments:{
+                        "selectIndex": 1,
+                        "fatora": fatora,
+                      }
                     );
                   },
                 ),
