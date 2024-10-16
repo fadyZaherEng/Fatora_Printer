@@ -7,6 +7,7 @@ import 'package:fatora/src/presentation/widgets/custom_text_field_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_filed_fatora_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AddFatoraScreen extends BaseStatefulWidget {
   const AddFatoraScreen({super.key});
@@ -56,6 +57,8 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
     _paymentController.text = paymentOptions.first;
     _fatoraStatusController.text = fatoraStatus.first;
     _fatoraSuccessController.text = fatoraSuccess.first;
+    _fatoraDateController.text=DateFormat.yMd('en_US').format(DateTime.now());
+    _fatoraTimeController.text=DateFormat.jm('en_US').format(DateTime.now()).replaceAll("PM","مساء").replaceAll("AM","صباحا");
   }
 
   @override

@@ -7,6 +7,7 @@ import 'package:fatora/src/core/utils/constants.dart';
 import 'package:fatora/src/core/utils/ios_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class CustomDatePickerTextFieldWidget extends StatefulWidget {
@@ -156,10 +157,10 @@ class _CustomDatePickerTextFieldWidgetState
     if (Platform.isAndroid) {
       androidDatePicker(
         context: context,
-        firstDate: DateTime(1900),
+        firstDate: DateTime(2010),
         onSelectDate: (date) {
           if (date == null) return;
-          widget.pickDate(date.toString().split(" ")[0]);
+          widget.pickDate(DateFormat.yMd('en_US').format(date));
           selectedDate = date;
           setState(() {});
         },
@@ -178,7 +179,7 @@ class _CustomDatePickerTextFieldWidgetState
         },
         onDone: () {
           selectedDate = tempDate;
-          widget.pickDate(selectedDate.toString().split(" ")[0]);
+          widget.pickDate(DateFormat.yMd('en_US').format(selectedDate!));
           Navigator.of(context).pop();
           setState(() {});
         },
