@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PrintFatoraScreen extends BaseStatefulWidget {
- final Fatora fatora;
+  final Fatora fatora;
 
   const PrintFatoraScreen({
     super.key,
@@ -30,7 +30,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                   crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15),
                     Row(
@@ -96,20 +96,24 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                       child: Row(
                         children: [
                           Text(widget.fatora.date,
-                              style:
-                                  Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: ColorSchemes.black,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
-                                      )),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: ColorSchemes.black,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  )),
                           const Spacer(),
                           Text(widget.fatora.time,
-                              style:
-                                  Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: ColorSchemes.black,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
-                                      )),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: ColorSchemes.black,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  )),
                         ],
                       ),
                     ),
@@ -174,7 +178,10 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                         children: [
                           Text(
                             widget.fatora.fatoraId.substring(0, 4),
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: ColorSchemes.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -182,7 +189,10 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           ),
                           Text(
                             "XXXXXXXX",
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: ColorSchemes.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -191,8 +201,12 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           Text(
                             //get last 4 digits sorted from right to left
                             widget.fatora.fatoraId.substring(
-                                widget.fatora.fatoraId.length - 4, widget.fatora.fatoraId.length),
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                widget.fatora.fatoraId.length - 4,
+                                widget.fatora.fatoraId.length),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: ColorSchemes.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -209,7 +223,10 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                         children: [
                           Text(
                             widget.fatora.fatoraId.substring(0, 4),
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: ColorSchemes.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -217,7 +234,10 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           ),
                           Text(
                             "XXXXXXXX",
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: ColorSchemes.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -226,8 +246,12 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                           Text(
                             //get last 4 digits sorted from right to left
                             widget.fatora.fatoraId.substring(
-                                widget.fatora.fatoraId.length - 4, widget.fatora.fatoraId.length),
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                widget.fatora.fatoraId.length - 4,
+                                widget.fatora.fatoraId.length),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: ColorSchemes.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -258,19 +282,22 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildItemNumber("رقم الايصال", widget.fatora.numberArrived),
-                          const SizedBox(height: 10),
-                          _buildItemNumber("رقم الحركة", widget.fatora.numberMove),
-                          const SizedBox(height: 10),
-                          _buildItemNumber("رقم الجهاز", widget.fatora.deviceNumber),
-                          const SizedBox(height: 10),
-                          _buildItemNumber("رقم التاجر", widget.fatora.traderNumber),
-                          const SizedBox(height: 10),
-                          ]
-                      ),
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildItemNumber(
+                                "رقم الايصال", widget.fatora.numberArrived),
+                            const SizedBox(height: 10),
+                            _buildItemNumber(
+                                "رقم الحركة", widget.fatora.numberMove),
+                            const SizedBox(height: 10),
+                            _buildItemNumber(
+                                "رقم الجهاز", widget.fatora.deviceNumber),
+                            const SizedBox(height: 10),
+                            _buildItemNumber(
+                                "رقم التاجر", widget.fatora.traderNumber),
+                            const SizedBox(height: 10),
+                          ]),
                     ),
                     // SvgPicture.asset(
                     //   ImagePaths.group,
@@ -300,8 +327,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                         onTap: () {},
                         buttonBorderRadius: 34,
                         text: "تحميل الفاتورة",
-                        backgroundColor:const Color.fromRGBO(48, 166, 41, 1),
-                      textColor: ColorSchemes.white,
+                        backgroundColor: const Color.fromRGBO(48, 166, 41, 1),
+                        textColor: ColorSchemes.white,
                       ),
                     )
                   ],
@@ -362,19 +389,21 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
               ],
             ),
           const SizedBox(width: 10),
-          Column(children: [
-            Container(
-              width: 10,
-              height: 3,
-              color: Colors.grey[300],
-            ),
-            const SizedBox(height: 3),
-            Container(
-              width: 10,
-              height: 3,
-              color: Colors.grey[300],
-            )
-          ]),
+          Column(
+            children: [
+              Container(
+                width: 10,
+                height: 3,
+                color: Colors.grey[300],
+              ),
+              const SizedBox(height: 3),
+              Container(
+                width: 10,
+                height: 3,
+                color: Colors.grey[300],
+              )
+            ],
+          ),
         ],
       );
 }
