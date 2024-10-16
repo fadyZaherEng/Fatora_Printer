@@ -1,10 +1,13 @@
+import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/screens/main/screen/main_screen.dart';
+import 'package:fatora/src/presentation/screens/print_fatora/print_fatora_screen.dart';
 import 'package:fatora/src/presentation/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
   static const String splash = "/";
   static const String main = "/main";
+  static const String printerFatora = "/printerFatora";
 }
 
 class RoutesManager {
@@ -16,10 +19,11 @@ class RoutesManager {
             routeSettings.arguments as Map<String, dynamic>;
         return _materialRoute(MainScreen(
           selectIndex: arg["selectIndex"] ?? 0,
-          isFromDeepLink: arg["isFromDeepLink"] ?? false,
-          inviterName: arg["inviterName"] ?? "",
-          unitName: arg["unitName"] ?? "",
         ));
+
+      case Routes.printerFatora:
+        Fatora fatora = routeSettings.arguments as Fatora;
+        return _materialRoute(PrintFatoraScreen(fatora: fatora));
 
       default:
         return _materialRoute(const SplashScreen());

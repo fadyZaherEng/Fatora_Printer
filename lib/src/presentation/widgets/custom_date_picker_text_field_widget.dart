@@ -14,7 +14,7 @@ class CustomDatePickerTextFieldWidget extends StatefulWidget {
   final String hintText;
   final TextInputType? keyboardType;
   final TextEditingController textEditingController;
-  final Function(String) pickDate;
+  final Function(String showDate,DateTime storedDate) pickDate;
   final Function(TimeOfDay) selectTime;
   final Function() deleteDate;
   final bool isDatePicked;
@@ -160,7 +160,7 @@ class _CustomDatePickerTextFieldWidgetState
         firstDate: DateTime(2010),
         onSelectDate: (date) {
           if (date == null) return;
-          widget.pickDate(DateFormat.yMd('en_US').format(date));
+          widget.pickDate(DateFormat.yMd('en_US').format(date), date);
           selectedDate = date;
           setState(() {});
         },
@@ -179,7 +179,7 @@ class _CustomDatePickerTextFieldWidgetState
         },
         onDone: () {
           selectedDate = tempDate;
-          widget.pickDate(DateFormat.yMd('en_US').format(selectedDate!));
+          widget.pickDate(DateFormat.yMd('en_US').format(selectedDate!),selectedDate!);
           Navigator.of(context).pop();
           setState(() {});
         },

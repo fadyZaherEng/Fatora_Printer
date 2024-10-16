@@ -5,7 +5,6 @@ import 'package:fatora/src/presentation/widgets/custom_date_picker_text_field_wi
 import 'package:fatora/src/presentation/widgets/custom_text_field_price_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_field_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_filed_fatora_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,6 +21,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
   final TextEditingController _fatoraSuccessController =
       TextEditingController();
   final TextEditingController _fatoraDateController = TextEditingController();
+  String storeDate = "";
   final TextEditingController _fatoraTimeController = TextEditingController();
   final TextEditingController _fatoraPriceController = TextEditingController();
   final TextEditingController _fatoraNameController = TextEditingController();
@@ -57,8 +57,11 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
     _paymentController.text = paymentOptions.first;
     _fatoraStatusController.text = fatoraStatus.first;
     _fatoraSuccessController.text = fatoraSuccess.first;
-    _fatoraDateController.text=DateFormat.yMd('en_US').format(DateTime.now());
-    _fatoraTimeController.text=DateFormat.jm('en_US').format(DateTime.now()).replaceAll("PM","مساء").replaceAll("AM","صباحا");
+    _fatoraDateController.text = DateFormat.yMd('en_US').format(DateTime.now());
+    _fatoraTimeController.text = DateFormat.jm('en_US')
+        .format(DateTime.now())
+        .replaceAll("PM", "مساء")
+        .replaceAll("AM", "صباحا");
   }
 
   @override
@@ -99,8 +102,9 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       isDatePicked: true,
                       selectTime: (_) {},
                       textEditingController: _fatoraDateController,
-                      pickDate: (String date) {
+                      pickDate: (String date, DateTime dateTime) {
                         _fatoraDateController.text = date;
+                        storeDate = dateTime.toString();
                       },
                       deleteDate: () {
                         _fatoraDateController.clear();
@@ -110,7 +114,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       hintText: "الوقت",
                       isDatePicked: false,
                       textEditingController: _fatoraTimeController,
-                      pickDate: (_) {},
+                      pickDate: (_, DateTime dateTime) {},
                       selectTime: (TimeOfDay time) {
                         String timeText =
                             time.format(context).replaceFirst("م", "مساء");

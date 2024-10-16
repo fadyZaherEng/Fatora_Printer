@@ -30,7 +30,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 15),
                     Row(
@@ -255,14 +255,23 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                     _buildArrowWidget(),
                     const SizedBox(height: 10),
                     //add some space
-                    _buildItemNumber("رقم الايصال", widget.fatora.numberArrived),
-                    const SizedBox(height: 10),
-                    _buildItemNumber("رقم الحركة", widget.fatora.numberMove),
-                    const SizedBox(height: 10),
-                    _buildItemNumber("رقم الجهاز", widget.fatora.deviceNumber),
-                    const SizedBox(height: 10),
-                    _buildItemNumber("رقم التاجر", widget.fatora.traderNumber),
-                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildItemNumber("رقم الايصال", widget.fatora.numberArrived),
+                          const SizedBox(height: 10),
+                          _buildItemNumber("رقم الحركة", widget.fatora.numberMove),
+                          const SizedBox(height: 10),
+                          _buildItemNumber("رقم الجهاز", widget.fatora.deviceNumber),
+                          const SizedBox(height: 10),
+                          _buildItemNumber("رقم التاجر", widget.fatora.traderNumber),
+                          const SizedBox(height: 10),
+                          ]
+                      ),
+                    ),
                     // SvgPicture.asset(
                     //   ImagePaths.group,
                     //   width: MediaQuery.of(context).size.width,
@@ -308,7 +317,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
 
   Widget _buildItemNumber(label, value) {
     return Text('$label: $value',
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.start,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: ColorSchemes.black,
               fontSize: 16,
