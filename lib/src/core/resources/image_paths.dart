@@ -7,4 +7,5 @@ class ImagePaths {
   static const String visa = "assets/images/visa.svg";
   static const String log = "assets/images/logo.svg";
   static const String group= "assets/images/group.svg";
+  static const String warning= "assets/images/warning.svg";
 }

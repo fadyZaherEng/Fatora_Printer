@@ -1,4 +1,3 @@
-
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/presentation/widgets/custom_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +12,16 @@ class ActionDialogWidget extends StatelessWidget {
   final Function() secondaryAction;
   final Color? iconColor;
 
-  const ActionDialogWidget(
-      {Key? key,
-      required this.text,
-      required this.icon,
-      required this.primaryText,
-      required this.secondaryText,
-      this.iconColor,
-      required this.primaryAction,
-      required this.secondaryAction})
-      : super(key: key);
+  const ActionDialogWidget({
+    super.key,
+    required this.text,
+    required this.icon,
+    required this.primaryText,
+    required this.secondaryText,
+    this.iconColor,
+    required this.primaryAction,
+    required this.secondaryAction,
+  });
 
   @override
   Widget build(BuildContext context) {
