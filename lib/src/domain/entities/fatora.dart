@@ -1,25 +1,112 @@
-class Fatora {
-  int? id;
-  String name;
-  int age;
+import 'package:equatable/equatable.dart';
 
-  Fatora({this.id, required this.name, required this.age});
+class Fatora  extends Equatable{
+  final String paymentMethod;
+  final String fatoraId;
+  final String name;
+  final String date;
+  final String time;
+  final String price;
+  final String numberArrived;
+  final String numberMove;
+  final String status;
+  final String statusSuccess;
+  final String deviceNumber;
+  final String traderNumber;
 
-  // Convert a Fatora object into a Map object
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'age': age,
-    };
+  const Fatora({
+     this.paymentMethod="",
+     this.fatoraId="",
+     this.name="",
+     this.date="",
+     this.time="",
+     this.price="",
+     this.numberArrived="",
+     this.numberMove="",
+     this.status="",
+     this.statusSuccess="",
+     this.deviceNumber="",
+     this.traderNumber="",
+  });
+
+  @override
+  List<Object?> get props => [
+    paymentMethod,
+    fatoraId,
+    name,
+    date,
+    time,
+    price,
+    numberArrived,
+    numberMove,
+    status,
+    statusSuccess,
+    deviceNumber,
+    traderNumber,
+  ];
+
+  Fatora copyWith({
+    String? paymentMethod,
+    String? fatoraId,
+    String? name,
+    String? date,
+    String? time,
+    String? price,
+    String? numberArrived,
+    String? numberMove,
+    String? status,
+    String? statusSuccess,
+    String? deviceNumber,
+    String? traderNumber,
+  }) {
+    return Fatora(
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      fatoraId: fatoraId ?? this.fatoraId,
+      name: name ?? this.name,
+      date: date ?? this.date,
+      time: time ?? this.time,
+      price: price ?? this.price,
+      numberArrived: numberArrived ?? this.numberArrived,
+      numberMove: numberMove ?? this.numberMove,
+      status: status ?? this.status,
+      statusSuccess: statusSuccess ?? this.statusSuccess,
+      deviceNumber: deviceNumber ?? this.deviceNumber,
+      traderNumber: traderNumber ?? this.traderNumber,
+    );
+  }
+  //from json
+  factory Fatora.fromJson(Map<String, dynamic> json) {
+    return Fatora(
+      paymentMethod: json['paymentMethod'],
+      fatoraId: json['fatoraId'],
+      name: json['name'],
+      date: json['date'],
+      time: json['time'],
+      price: json['price'],
+      numberArrived: json['numberArrived'],
+      numberMove: json['numberMove'],
+      status: json['status'],
+      statusSuccess: json['statusSuccess'],
+      deviceNumber: json['deviceNumber'],
+      traderNumber: json['traderNumber'],
+    );
   }
 
-  // Convert a Map object into a Fatora object
-  factory Fatora.fromMap(Map<String, dynamic> map) {
-    return Fatora(
-      id: map['id'],
-      name: map['name'],
-      age: map['age'],
-    );
+  //to json
+  Map<String, dynamic> toJson() {
+    return {
+      'paymentMethod': paymentMethod,
+      'fatoraId': fatoraId,
+      'name': name,
+      'date': date,
+      'time': time,
+      'price': price,
+      'numberArrived': numberArrived,
+      'numberMove': numberMove,
+      'status': status,
+      'statusSuccess': statusSuccess,
+      'deviceNumber': deviceNumber,
+      'traderNumber': traderNumber,
+    };
   }
 }

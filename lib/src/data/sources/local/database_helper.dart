@@ -38,7 +38,7 @@ class DatabaseHelper {
     final db = await database;
     return await db.insert(
       'users',
-      user.toMap(),
+      user.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -49,20 +49,20 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> maps = await db.query('users');
 
     return List.generate(maps.length, (i) {
-      return Fatora.fromMap(maps[i]);
+      return Fatora.fromJson(maps[i]);
     });
   }
 
   // Update a user in the database
-  Future<int> updateFatora(Fatora user) async {
-    final db = await database;
-    return await db.update(
-      'users',
-      user.toMap(),
-      where: 'id = ?',
-      whereArgs: [user.id],
-    );
-  }
+  // Future<int> updateFatora(Fatora user) async {
+  //   final db = await database;
+  //   return await db.update(
+  //     'users',
+  //     user.toMap(),
+  //     where: 'id = ?',
+  //     whereArgs: [user.id],
+  //   );
+  // }
 
   // Delete a user from the database
   Future<int> deleteFatora(int id) async {
