@@ -14,7 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 class PrintScreen extends StatefulWidget {
   final Uint8List imageBytes;
 
-  PrintScreen({Key? key, required this.imageBytes}) : super(key: key);
+  const PrintScreen({Key? key, required this.imageBytes}) : super(key: key);
 
   @override
   _PrintScreenState createState() => _PrintScreenState();
@@ -26,16 +26,19 @@ class _PrintScreenState extends State<PrintScreen> {
   BluetoothDevice? connectedDevice;
 
   @override
-  void initState() {
-    super.initState();
-    requestPermissions();
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    await requestPermissions();
   }
 
   // Request Bluetooth permissions
-  void requestPermissions() async {
+  Future<void> requestPermissions() async {
     // Request the necessary Bluetooth permissions
-    var status = await Permission.bluetoothScan.request();
-    if (status.isGranted) {
+    // var status = await Permission.bluetoothScan.request();
+    if (await PermissionServiceHandler()
+            .handleServicePermission(setting: Permission.bluetoothConnect) &&
+        await PermissionServiceHandler()
+            .handleServicePermission(setting: Permission.bluetoothScan)) {
       // If granted, start scanning for devices
       scanForDevices();
     } else {
@@ -45,8 +48,10 @@ class _PrintScreenState extends State<PrintScreen> {
           primaryAction: () async {
             Navigator.pop(context);
             openAppSettings().then((value) async {
-              if (await PermissionServiceHandler()
-                  .handleServicePermission(setting: Permission.bluetoothScan)) {}
+              if (await PermissionServiceHandler().handleServicePermission(
+                      setting: Permission.bluetoothConnect) &&
+                  await PermissionServiceHandler().handleServicePermission(
+                      setting: Permission.bluetoothScan)) {}
             });
           });
       // Handle the case when the user denies the permission
@@ -72,6 +77,13 @@ class _PrintScreenState extends State<PrintScreen> {
     setState(() {
       connectedDevice = device;
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("  تم الاتصال بالجهاز من فضلك اضغط طباعة الفاتورة"),
+        backgroundColor: Colors.green,
+      ),
+    );
+
   }
 
   Future<void> printImage() async {
@@ -92,7 +104,7 @@ class _PrintScreenState extends State<PrintScreen> {
         printer.feed(2); // Feed the paper after printing
         printer.disconnect();
       } else {
-        print("Could not connect to printer");
+        print("لا يمكن الاتصال بالطابعة");
         //SnackBar
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -101,7 +113,7 @@ class _PrintScreenState extends State<PrintScreen> {
           ),
         );
       }
-    }else{
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("لم يتم الاتصال بالجهاز"),
@@ -122,12 +134,19 @@ class _PrintScreenState extends State<PrintScreen> {
               const SizedBox(height: 10),
               const Text("اختر الجهاز الذي تريد الطباعة"),
               const SizedBox(height: 10),
+              Icon(
+                Icons.bluetooth,
+                size: 60,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(height: 10),
+              if (devicesList.isEmpty) const LinearProgressIndicator(),
               Expanded(
                 child: ListView.builder(
                   itemCount: devicesList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(devicesList[index].name),
+                      title: Text(devicesList[index].id.toString()),
                       onTap: () => connectToDevice(devicesList[index]),
                     );
                   },
@@ -168,12 +187,6 @@ class _PrintScreenState extends State<PrintScreen> {
         });
   }
 }
-
-
-
-
-
-
 
 // class PrintOrderScreen extends StatefulWidget {
 //  final Uint8List imageBytes;
@@ -217,14 +230,6 @@ class _PrintScreenState extends State<PrintScreen> {
 //     );
 //   }
 // }
-
-
-
-
-
-
-
-
 
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
