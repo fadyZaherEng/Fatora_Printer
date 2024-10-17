@@ -83,7 +83,6 @@ class _PrintScreenState extends State<PrintScreen> {
         backgroundColor: Colors.green,
       ),
     );
-
   }
 
   Future<void> printImage() async {
