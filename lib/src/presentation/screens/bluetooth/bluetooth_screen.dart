@@ -169,6 +169,63 @@ class _PrintScreenState extends State<PrintScreen> {
   }
 }
 
+
+
+
+
+
+
+// class PrintOrderScreen extends StatefulWidget {
+//  final Uint8List imageBytes;
+//   PrintOrderScreen({required this.imageBytes, super.key});
+//   @override
+//   State<PrintOrderScreen> createState() => _PrintOrderScreenState();
+// }
+//
+// class _PrintOrderScreenState extends State<PrintOrderScreen> {
+//   final pdf = pw.Document();
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     pdf.addPage(
+//       pw.Page(build: (ctx) {
+//         return pw.Center(
+//           child: pw.Image(pw.MemoryImage(widget.imageBytes)),
+//         );
+//       },
+//       ),
+//     );
+//
+//     //savePdf();
+//     print(pdf.document);
+//   }
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: showOrders(),
+//       ),
+//     );
+//   }
+//
+//   Widget showOrders() {
+//     return PdfPreview(
+//       build: (format) => pdf.save(),
+//     );
+//   }
+// }
+
+
+
+
+
+
+
+
+
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:pdf/widgets.dart' as pw;

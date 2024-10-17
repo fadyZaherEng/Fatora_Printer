@@ -3,6 +3,7 @@ import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/screens/history/skeleton/history_skeleton.dart';
 import 'package:fatora/src/presentation/screens/history/widgets/fatora_tables_widget.dart';
+import 'package:fatora/src/presentation/screens/main/screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -159,14 +160,20 @@ class _HistoryScreenState extends BaseState<HistoryScreen> {
                 FatoraTablesWidget(
                   groupedFatora: groupedFatoraList ?? {},
                   onTap: (fatora) {
-                    Navigator.pushReplacementNamed(
-                      context,
-                      Routes.main,
-                      arguments:{
-                        "selectIndex": 1,
-                        "fatora": fatora,
-                      }
-                    );
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => MainScreen(
+                        selectIndex: 1,
+                        fatora: fatora,
+                      ),
+                    ));
+                    // Navigator.pushReplacementNamed(
+                    //   context,
+                    //   Routes.main,
+                    //   arguments:{
+                    //     "selectIndex": 1,
+                    //     "fatora": fatora,
+                    //   }
+                    // );
                   },
                 ),
                 const SizedBox(height: 30),

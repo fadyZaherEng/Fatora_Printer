@@ -66,7 +66,6 @@ dependencies:
   flutter_blue: ^0.8.0
   esc_pos_utils: ^1.1.0
   image:
-#  esc_pos_printer: ^5.0.2
 
 
 dev_dependencies:
