@@ -8,6 +8,7 @@ import 'package:fatora/src/core/resources/image_paths.dart';
 import 'package:fatora/src/core/utils/permission_service_handler.dart';
 import 'package:fatora/src/core/utils/show_action_dialog_widget.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
+import 'package:fatora/src/presentation/screens/bluetooth/bluetooth_screen.dart';
 import 'package:fatora/src/presentation/widgets/custom_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -382,7 +383,10 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                   children: [
                     Expanded(
                       child: CustomButtonWidget(
-                        onTap: () {},
+                        onTap: () {
+
+                          _connectWithBluetoothPrinter();
+                        },
                         buttonBorderRadius: 34,
                         text: "طباعة الفاتورة",
                         backgroundColor: ColorSchemes.primary,
@@ -487,7 +491,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
   // Function to capture the widget as an image
   Future<void> _captureAndSaveImage() async {
     // Delay capture until the widget has fully rendered
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     try {
       // Request permissions (for mobile platforms)
       if (await PermissionServiceHandler().handleServicePermission(
@@ -507,13 +511,10 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         setState(() {
           _imageBytes = pngBytes; // Set the image bytes to display later
         });
-        // Save the image to the device (path_provider for access to directories)
-        // final directory = (await getApplicationDocumentsDirectory()).path;
-        // File imgFile = File('$directory/screenshot.png');
-        // await imgFile.writeAsBytes(pngBytes);
         // Save the image to the gallery using ImageGallerySaver
-        final result =
-            await ImageGallerySaver.saveImage(pngBytes, quality: 100);
+        final result = await ImageGallerySaver.saveImage(
+            _imageBytes ?? Uint8List.fromList([]),
+            quality: 100);
         print(result); // Prints the saved path in the gallery
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -562,5 +563,46 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         secondaryAction: () {
           secondaryAction ?? Navigator.pop(context);
         });
+  }
+
+  void _connectWithBluetoothPrinter()async {
+    if (await PermissionServiceHandler().handleServicePermission(
+        setting: PermissionServiceHandler.getStorageFilesPermission(
+          androidDeviceInfo:
+          Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null,
+        ))) {
+      RenderRepaintBoundary boundary = _globalKeyForPrint.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+
+      // Convert the widget to an image
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData? byteData =
+      await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
+      // Update the state with the captured image
+        _imageBytes = pngBytes; // Set the image bytes to display later
+    } else {
+      _dialogMessage(
+          icon: ImagePaths.warning,
+          message: "Storage Permission Is Required To Proceed",
+          primaryAction: () async {
+            Navigator.pop(context);
+            openAppSettings().then((value) async {
+              if (await PermissionServiceHandler()
+                  .handleServicePermission(setting: Permission.storage)) {}
+            });
+          });
+    }
+    if (_imageBytes != null) {
+      //TODO: implement connect with bluetooth printer
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PrintScreen(
+           imageBytes:   _imageBytes!,
+          ),
+        ),
+      );
+    }
   }
 }

@@ -2,6 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>com.apple.security.print</key>
+<true/>
+<dict>
+
+	    <key>NSBluetoothPeripheralUsageDescription</key>
+	    <string>Need BLE permission</string>
+	    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	    <string>Need Location permission</string>
+	    <key>NSLocationAlwaysUsageDescription</key>
+	    <string>Need Location permission</string>
+	    <key>NSLocationWhenInUseUsageDescription</key>
+	    <string>Need Location permission</string>
+<key>NSBluetoothAlwaysUsageDescription</key>
+<string>We need access to Bluetooth to connect to printers.</string>
+
  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>Description</string>
     <key>NSLocationAlwaysUsageDescription</key>

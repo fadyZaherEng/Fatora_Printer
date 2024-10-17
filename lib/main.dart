@@ -1,11 +1,9 @@
-import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:fatora/generated/l10n.dart';
 import 'package:fatora/src/config/routes/routes_manager.dart';
 import 'package:fatora/src/di/injector.dart';
-import 'package:fatora/src/presentation/screens/print_fatora/print_fatora_screen.dart';
+import 'package:fatora/src/presentation/screens/main/screen/main_screen.dart';
 import 'package:fatora/src/presentation/widgets/restart_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
@@ -34,27 +32,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       navigatorKey: navigatorKey,
       navigatorObservers: [
-        ChuckerFlutter.navigatorObserver,
         routeObserver,
       ],
       themeMode: ThemeMode.light,
       supportedLocales: S.delegate.supportedLocales,
       onGenerateRoute: RoutesManager.getRoute,
-       initialRoute: Routes.splash,
-      // home: PrintFatoraScreen(
-      //   name: "Fady Zaher",
-      //   date: "12/12/2022",
-      //   time: "12:00",
-      //   status: "Delivered",
-      //   deviceNumber: "123456",
-      //   fatoraId: "1234567891234567",
-      //   numberArrived: "123456",
-      //   numberMove: "123456",
-      //   paymentMethod: "Visa",
-      //   price: "IQD 12,12,15",
-      //   statusSuccess: "Success",
-      //   traderNumber: "123456",
-      // ),
+      home: const MainScreen(),
       localizationsDelegates: const [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -63,8 +46,7 @@ class _MyAppState extends State<MyApp> {
       ],
       debugShowCheckedModeBanner: false,
       title: 'Fatora',
-      // theme: AppTheme(state.languageCode).light,
-      // locale: state,
+      locale: const Locale('ar'),
     );
   }
 }
