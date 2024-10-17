@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
+
   factory DatabaseHelper() => _instance;
 
   static Database? _database;
@@ -29,48 +30,49 @@ class DatabaseHelper {
   // Create the table
   Future<void> _onCreate(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER)',
+      'CREATE TABLE fatories (id INTEGER PRIMARY KEY AUTOINCREMENT, paymentMethod TEXT, fatoraId TEXT, name TEXT, date TEXT, time TEXT, '
+          'price TEXT, numberArrived TEXT, numberMove TEXT, status TEXT, statusSuccess TEXT, deviceNumber TEXT, traderNumber TEXT)',
     );
   }
 
-  // Insert a user into the database
-  Future<int> insertFatora(Fatora user) async {
+  // Insert a fatora into the database
+  Future<int> insertFatora(Fatora fatora) async {
     final db = await database;
     return await db.insert(
-      'users',
-      user.toJson(),
+      'fatories',
+      fatora.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  // Retrieve all users from the database
+  // Retrieve all fatoras from the database
   Future<List<Fatora>> getFatora() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('users');
+    final List<Map<String, dynamic>> maps = await db.query('fatories');
 
     return List.generate(maps.length, (i) {
       return Fatora.fromJson(maps[i]);
     });
   }
 
-  // Update a user in the database
-  // Future<int> updateFatora(Fatora user) async {
-  //   final db = await database;
-  //   return await db.update(
-  //     'users',
-  //     user.toMap(),
-  //     where: 'id = ?',
-  //     whereArgs: [user.id],
-  //   );
-  // }
-
-  // Delete a user from the database
+  // Delete a fatora from the database
   Future<int> deleteFatora(int id) async {
     final db = await database;
     return await db.delete(
-      'users',
+      'fatories',
       where: 'id = ?',
       whereArgs: [id],
+    );
+  }
+
+  // Update a fatora in the database
+  Future<int> updateFatora(Fatora fatora) async {
+    final db = await database;
+    return await db.update(
+      'fatories',
+      fatora.toJson(),
+      where: 'id = ?',
+      whereArgs: [fatora.id],
     );
   }
 

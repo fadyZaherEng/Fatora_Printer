@@ -52,7 +52,7 @@ class _MainScreenState extends BaseState<MainScreen>
       resizeToAvoidBottomInset: false,
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(50)),
           child: SizedBox(

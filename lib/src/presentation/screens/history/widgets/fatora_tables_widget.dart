@@ -166,7 +166,7 @@ class FatoraTablesWidget extends StatelessWidget {
                                 ),
                                 Text(
                                   DateFormat.yMd('en_US')
-                                      .format(DateTime.parse(fatora.date)),
+                                      .format(fatora.date=="" ? DateTime.now() : DateTime.parse(fatora.date)),
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400,

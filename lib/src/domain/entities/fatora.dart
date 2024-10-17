@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Fatora  extends Equatable{
+  final int id;
   final String paymentMethod;
   final String fatoraId;
   final String name;
@@ -27,6 +28,7 @@ class Fatora  extends Equatable{
      this.statusSuccess="",
      this.deviceNumber="",
      this.traderNumber="",
+      this.id=0,
   });
 
   @override
@@ -43,6 +45,7 @@ class Fatora  extends Equatable{
     statusSuccess,
     deviceNumber,
     traderNumber,
+    id
   ];
 
   Fatora copyWith({
@@ -58,6 +61,7 @@ class Fatora  extends Equatable{
     String? statusSuccess,
     String? deviceNumber,
     String? traderNumber,
+    int? id
   }) {
     return Fatora(
       paymentMethod: paymentMethod ?? this.paymentMethod,
@@ -72,6 +76,7 @@ class Fatora  extends Equatable{
       statusSuccess: statusSuccess ?? this.statusSuccess,
       deviceNumber: deviceNumber ?? this.deviceNumber,
       traderNumber: traderNumber ?? this.traderNumber,
+      id: id ?? this.id
     );
   }
   //from json
@@ -89,6 +94,7 @@ class Fatora  extends Equatable{
       statusSuccess: json['statusSuccess'],
       deviceNumber: json['deviceNumber'],
       traderNumber: json['traderNumber'],
+      id: json['id'],
     );
   }
 
@@ -107,6 +113,7 @@ class Fatora  extends Equatable{
       'statusSuccess': statusSuccess,
       'deviceNumber': deviceNumber,
       'traderNumber': traderNumber,
+      'id': id
     };
   }
 }

@@ -1,12 +1,14 @@
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
+import 'package:fatora/src/presentation/blocs/fatora/fatora_bloc.dart';
 import 'package:fatora/src/presentation/widgets/custom_button_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_date_picker_text_field_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_field_price_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_field_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_filed_fatora_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class AddFatoraScreen extends BaseStatefulWidget {
@@ -43,6 +45,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
   String? numberDeviceErrorMessage;
   String? arrowMoveMessage;
   Fatora _fatora = Fatora();
+  FatoraBloc get fatoraBloc => BlocProvider.of<FatoraBloc>(context);
 
   List<String> paymentOptions = [
     "QiCard",
@@ -286,7 +289,6 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       numberMoveErrorMessage == null &&
                       arrowMoveMessage == null &&
                       numberDeviceErrorMessage == null) {
-                    //TODO: add fatora
                     //TODO: Add  data to fatora model
                     _fatora = Fatora(
                       date: storeDate,
@@ -303,10 +305,9 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       time: _fatoraTimeController.text,
                     );
                     //Todo: Add Fatora in database
-
+                    fatoraBloc.add(AddFatoraEvent(fatora: _fatora));
                     Navigator.pop(context, _fatora);
                   }
-                  setState(() {});
                 },
                 width: 190,
                 buttonBorderRadius: 34,
@@ -335,7 +336,6 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
     if (_fatoraNumberDeviceController.text.length != 6) {
       numberDeviceErrorMessage = "يجب ان يكون 6 رقم";
     }
-
     setState(() {});
   }
 }
