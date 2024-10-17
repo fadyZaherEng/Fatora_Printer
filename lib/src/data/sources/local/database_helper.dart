@@ -47,12 +47,22 @@ class DatabaseHelper {
 
   // Retrieve all fatoras from the database
   Future<List<Fatora>> getFatora() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('fatories');
+    final db = await database;  // Ensure the database is opened properly
 
-    return List.generate(maps.length, (i) {
-      return Fatora.fromJson(maps[i]);
-    });
+    // Perform a query and order results by the 'name' column in ascending order
+    final List<Map<String, dynamic>> maps = await db.query(
+      'fatories',
+      orderBy: 'name ASC',  // Use the 'ORDER BY' clause to sort by name in ascending order
+    );
+     print("length: ${maps.length}");
+    // Check if maps is not null and contains data
+    if (maps.isNotEmpty) {
+      // Generate and return the list of Fatora objects
+      return maps.map((map) => Fatora.fromJson(map)).toList();
+    } else {
+      // Return an empty list if no records are found
+      return <Fatora>[];
+    }
   }
 
   // Delete a fatora from the database

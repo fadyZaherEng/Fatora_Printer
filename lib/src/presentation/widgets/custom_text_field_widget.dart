@@ -28,11 +28,11 @@ class CustomTextFieldWidget extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 46,
+       height: height,
           child: TextFormField(
             controller: textEditingController,
             keyboardType: keyboardType,
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
                 fontWeight: Constants.fontWeightRegular,
                 color: ColorSchemes.black,
                 letterSpacing: -0.13),
@@ -59,8 +59,8 @@ class CustomTextFieldWidget extends StatelessWidget {
                 borderSide: BorderSide(color: ColorSchemes.redError),
               ),
               prefixIcon: Container(
-                height: height,
                 width: 50,
+                height: height,
                 margin: const EdgeInsetsDirectional.only(end: 8.0),
                 alignment: Alignment.center,
                 color: ColorSchemes.iconBackGround,

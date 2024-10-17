@@ -201,7 +201,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
             const SizedBox(height: 20),
             Row(children: [
               SizedBox(
-                  width: 150,
+                  width: 120,
                   child: CustomTextFieldWidget(
                     hintText: "رقم الايصال",
                     errorMessage: numberArrivedErrorMessage,
@@ -218,7 +218,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       setState(() {});
                     },
                   )),
-              const SizedBox(width: 20),
+              const SizedBox(width: 10),
               Expanded(
                   child: CustomTextFieldWidget(
                 hintText: "رقم الحركة",
@@ -234,7 +234,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
             const SizedBox(height: 20),
             Row(children: [
               SizedBox(
-                  width: 150,
+                  width:120,
                   child: CustomTextFieldWidget(
                     hintText: "رمز الحركة",
                     maxLength: 4,
@@ -251,7 +251,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       setState(() {});
                     },
                   )),
-              const SizedBox(width: 20),
+              const SizedBox(width: 10),
               Expanded(
                   child: CustomTextFieldWidget(
                 hintText: "رقم الجهاز",
@@ -291,9 +291,9 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       numberDeviceErrorMessage == null) {
                     //TODO: Add  data to fatora model
                     _fatora = Fatora(
-                      date: storeDate,
+                      date: storeDate==""?_fatoraDateController.text:storeDate,
                       status: _fatoraStatusController.text,
-                      price: _fatoraPriceController.text,
+                      price: "${_fatoraPriceController.text} IQD",
                       statusSuccess: _fatoraSuccessController.text,
                       fatoraId: _fatoraIdController.text,
                       numberArrived: _fatoraNumberArrivedController.text,

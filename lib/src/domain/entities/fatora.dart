@@ -113,7 +113,6 @@ class Fatora  extends Equatable{
       'statusSuccess': statusSuccess,
       'deviceNumber': deviceNumber,
       'traderNumber': traderNumber,
-      'id': id
     };
   }
 }
