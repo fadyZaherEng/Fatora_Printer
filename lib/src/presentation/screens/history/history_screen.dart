@@ -96,7 +96,7 @@ class _HistoryScreenState extends BaseState<HistoryScreen> {
                           const SizedBox(height: 10),
                           FatoraTablesWidget(
                             groupedFatora: groupedFatoraList ?? {},
-                            onTap: (fatora) {
+                            onTapView: (fatora) {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -105,6 +105,10 @@ class _HistoryScreenState extends BaseState<HistoryScreen> {
                                       fatora: fatora,
                                     ),
                                   ));
+                            },
+                            onTapDelete: (fatora) async {
+                              await DatabaseHelper().deleteFatora(fatora.id);
+                              _bloc.add(GetFatoraEvent());
                             },
                           ),
                           const SizedBox(height: 30),

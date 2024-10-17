@@ -5,12 +5,14 @@ import 'package:intl/intl.dart';
 
 class FatoraTablesWidget extends StatelessWidget {
   final Map<String, List<Fatora>> groupedFatora;
-  final Function(Fatora) onTap;
+  final Function(Fatora) onTapView;
+  final Function(Fatora) onTapDelete;
 
   const FatoraTablesWidget({
     super.key,
     required this.groupedFatora,
-    required this.onTap,
+    required this.onTapView,
+    required this.onTapDelete,
   });
 
   @override
@@ -138,43 +140,70 @@ class FatoraTablesWidget extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(fatora.price),
                         ),
-                        InkWell(
-                          onTap:()=> onTap(fatora),
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Container(
-                                  width: 43,
-                                  height: 26,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(3),
-                                    color:
-                                        const Color.fromRGBO(232, 239, 251, 1),
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(1.0),
-                                      child: Text(
-                                        "view",
-                                        style: TextStyle(
-                                            color: ColorSchemes.primary),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () => onTapView(fatora),
+                                    child: Container(
+                                      width: 43,
+                                      height: 26,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(3),
+                                        color:
+                                            const Color.fromRGBO(232, 239, 251, 1),
+                                      ),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: Text(
+                                            "view",
+                                            style: TextStyle(
+                                                color: ColorSchemes.primary),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Text(
-                                  DateFormat.yMd('en_US')
-                                      .format(fatora.date=="" ? DateTime.now() : DateTime.parse(fatora.date)),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 13,
+                                  const SizedBox(height: 5),
+                                  InkWell(
+                                    onTap: () => onTapDelete(fatora),
+                                    child: Container(
+                                      width: 43,
+                                      height: 26,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(3),
+                                        color:
+                                        const Color.fromRGBO(232, 239, 251, 1),
+                                      ),
+                                      child: const Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(1.0),
+                                          child: Text(
+                                            "مسح",
+                                            style: TextStyle(
+                                                color: ColorSchemes.red),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
+                                ],
+                              ),
+                              Text(
+                                DateFormat.yMd('en_US')
+                                    .format(fatora.date=="" ? DateTime.now() : DateTime.parse(fatora.date)),
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 13,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ]);
