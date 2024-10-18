@@ -30,7 +30,7 @@ class DatabaseHelper {
   // Create the table
   Future<void> _onCreate(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE fatories (id INTEGER PRIMARY KEY AUTOINCREMENT, paymentMethod TEXT, fatoraId TEXT, name TEXT, date TEXT, time TEXT, '
+      'CREATE TABLE fatories (id INTEGER PRIMARY KEY AUTOINCREMENT, paymentMethod TEXT, fatoraId TEXT,fatoraSenderId TEXT, name TEXT, date TEXT, time TEXT, '
           'price TEXT, numberArrived TEXT, numberMove TEXT, status TEXT, statusSuccess TEXT, deviceNumber TEXT, traderNumber TEXT)',
     );
   }

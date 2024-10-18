@@ -4,6 +4,7 @@ class Fatora  extends Equatable{
   final int id;
   final String paymentMethod;
   final String fatoraId;
+  final String fatoraSenderId;
   final String name;
   final String date;
   final String time;
@@ -28,7 +29,8 @@ class Fatora  extends Equatable{
      this.statusSuccess="",
      this.deviceNumber="",
      this.traderNumber="",
-      this.id=0,
+      this.fatoraSenderId="",
+    this.id=0
   });
 
   @override
@@ -45,7 +47,8 @@ class Fatora  extends Equatable{
     statusSuccess,
     deviceNumber,
     traderNumber,
-    id
+    id,
+    fatoraSenderId
   ];
 
   Fatora copyWith({
@@ -61,7 +64,7 @@ class Fatora  extends Equatable{
     String? statusSuccess,
     String? deviceNumber,
     String? traderNumber,
-    int? id
+    String? fatoraSenderId
   }) {
     return Fatora(
       paymentMethod: paymentMethod ?? this.paymentMethod,
@@ -76,7 +79,7 @@ class Fatora  extends Equatable{
       statusSuccess: statusSuccess ?? this.statusSuccess,
       deviceNumber: deviceNumber ?? this.deviceNumber,
       traderNumber: traderNumber ?? this.traderNumber,
-      id: id ?? this.id
+      fatoraSenderId: fatoraSenderId ?? this.fatoraSenderId
     );
   }
   //from json
@@ -95,6 +98,7 @@ class Fatora  extends Equatable{
       deviceNumber: json['deviceNumber'],
       traderNumber: json['traderNumber'],
       id: json['id'],
+      fatoraSenderId: json['fatoraSenderId']
     );
   }
 
@@ -113,6 +117,7 @@ class Fatora  extends Equatable{
       'statusSuccess': statusSuccess,
       'deviceNumber': deviceNumber,
       'traderNumber': traderNumber,
+      'fatoraSenderId': fatoraSenderId
     };
   }
 }

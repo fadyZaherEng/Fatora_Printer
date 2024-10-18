@@ -86,107 +86,107 @@ class _PrintScreenState extends State<PrintScreen> {
     );
   }
 
-  // Future<void> printImage() async {
-  //   if (connectedDevice != null) {
-  //     final profile = await CapabilityProfile.load();
-  //     final printer = NetworkPrinter(PaperSize.mm80, profile);
-  //
-  //     // Connect to printer
-  //     final connectResult =
-  //     await printer.connect(connectedDevice!.id.toString(), port: 9100);
-  //
-  //     if (connectResult == PosPrintResult.success) {
-  //       // Print the image
-  //       printer.image(
-  //         img.decodeImage(widget.imageBytes)!,
-  //         align: PosAlign.center,
-  //       );
-  //       printer.feed(2); // Feed the paper after printing
-  //       printer.disconnect();
-  //     } else {
-  //       print("لا يمكن الاتصال بالطابعة");
-  //       //SnackBar
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text("لم يتم الاتصال بالجهاز"),
-  //           backgroundColor: Colors.red,
-  //         ),
-  //       );
-  //     }
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(
-  //         content: Text("لم يتم الاتصال بالجهاز"),
-  //         backgroundColor: Colors.red,
-  //       ),
-  //     );
-  //   }
-  // }
-  // Print a Uint8List image
-  void printImage(Uint8List imageData) async {
-    if (connectedDevice == null) {
-      print('No device connected');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: ColorSchemes.white,
-          content: Text(
-            'لا يوجد جهاز متصلة',
-            style: TextStyle(color: ColorSchemes.primary),
-          ),
-        ),
-      );
-      return;
-    }
+  Future<void> printImage() async {
+    if (connectedDevice != null) {
+      final profile = await CapabilityProfile.load();
+      final printer = NetworkPrinter(PaperSize.mm80, profile);
 
-    // Decode the Uint8List to an image
-    img.Image? image = img.decodeImage(imageData);
-    if (image != null) {
-      // Resize the image to fit printer width (384 pixels for most thermal printers)
-      img.Image resizedImage = img.copyResize(image, width: 384);
+      // Connect to printer
+      final connectResult =
+      await printer.connect(connectedDevice!.id.toString(), port: 9100);
 
-      // Convert image to bytes (PNG format)
-      Uint8List imageBytes = Uint8List.fromList(img.encodePng(resizedImage));
-
-      // Send the image bytes to the printer
-      BluetoothCharacteristic? characteristic =
-          await findWritableCharacteristic();
-      if (characteristic != null) {
-        await characteristic.write(imageBytes, withoutResponse: true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: ColorSchemes.white,
-            content: Text(
-              'تم الطباعة بنجاح',
-              style: TextStyle(color: ColorSchemes.primary),
-            ),
-          ),
+      if (connectResult == PosPrintResult.success) {
+        // Print the image
+        printer.image(
+          img.decodeImage(widget.imageBytes)!,
+          align: PosAlign.center,
         );
-        print('Image sent to printer');
+        printer.feed(2); // Feed the paper after printing
+        printer.disconnect();
       } else {
-        print('Failed to find writable characteristic');
+        print("لا يمكن الاتصال بالطابعة");
+        //SnackBar
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: ColorSchemes.white,
-            content: Text(
-              'فشل الطباعة',
-              style: TextStyle(color: ColorSchemes.primary),
-            ),
+          const SnackBar(
+            content: Text("لم يتم الاتصال بالجهاز"),
+            backgroundColor: Colors.red,
           ),
         );
       }
     } else {
-      print('Failed to decode image');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: ColorSchemes.white,
-          content: Text(
-            'فشل الطباعة',
-            style: TextStyle(color: ColorSchemes.primary),
-          ),
+        const SnackBar(
+          content: Text("لم يتم الاتصال بالجهاز"),
+          backgroundColor: Colors.red,
         ),
       );
     }
   }
+  // Print a Uint8List image
+  // void printImage(Uint8List imageData) async {
+  //   if (connectedDevice == null) {
+  //     print('No device connected');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         backgroundColor: ColorSchemes.white,
+  //         content: Text(
+  //           'لا يوجد جهاز متصلة',
+  //           style: TextStyle(color: ColorSchemes.primary),
+  //         ),
+  //       ),
+  //     );
+  //     return;
+  //   }
+  //
+  //   // Decode the Uint8List to an image
+  //   img.Image? image = img.decodeImage(imageData);
+  //   if (image != null) {
+  //     // Resize the image to fit printer width (384 pixels for most thermal printers)
+  //     img.Image resizedImage = img.copyResize(image, width: 384);
+  //
+  //     // Convert image to bytes (PNG format)
+  //     Uint8List imageBytes = Uint8List.fromList(img.encodePng(resizedImage));
+  //
+  //     // Send the image bytes to the printer
+  //     BluetoothCharacteristic? characteristic =
+  //         await findWritableCharacteristic();
+  //     if (characteristic != null) {
+  //       await characteristic.write(imageBytes, withoutResponse: true);
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           backgroundColor: ColorSchemes.white,
+  //           content: Text(
+  //             'تم الطباعة بنجاح',
+  //             style: TextStyle(color: ColorSchemes.primary),
+  //           ),
+  //         ),
+  //       );
+  //       print('Image sent to printer');
+  //     } else {
+  //       print('Failed to find writable characteristic');
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           backgroundColor: ColorSchemes.white,
+  //           content: Text(
+  //             'فشل الطباعة',
+  //             style: TextStyle(color: ColorSchemes.primary),
+  //           ),
+  //         ),
+  //       );
+  //     }
+  //   } else {
+  //     print('Failed to decode image');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         backgroundColor: ColorSchemes.white,
+  //         content: Text(
+  //           'فشل الطباعة',
+  //           style: TextStyle(color: ColorSchemes.primary),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 
   // Find a writable characteristic for sending data
   Future<BluetoothCharacteristic?> findWritableCharacteristic() async {
@@ -225,16 +225,29 @@ class _PrintScreenState extends State<PrintScreen> {
                 child: ListView.builder(
                   itemCount: devicesList.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(devicesList[index].name.toString()),
-                      onTap: () => connectToDevice(devicesList[index]),
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(devicesList[index].name.toString()),
+                          Text(devicesList[index].id.toString()),
+                          Container(
+                            height: 1,
+                            color: Colors.grey,
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+
+                          )
+                        ],
+                      ),
                     );
                   },
                 ),
               ),
               Image.memory(widget.imageBytes, width: 200, height: 200),
               ElevatedButton(
-                onPressed: () => printImage(widget.imageBytes),
+                onPressed: () => printImage,
                 child: const Text("طباعة الفاتورة"),
               ),
               Text(connectedDevice != null

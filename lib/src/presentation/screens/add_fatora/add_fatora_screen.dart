@@ -26,6 +26,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
   final TextEditingController _fatoraDateController = TextEditingController();
   String storeDate = "";
   final TextEditingController _fatoraTimeController = TextEditingController();
+  final TextEditingController _fatoraSenderController = TextEditingController();
   final TextEditingController _fatoraPriceController = TextEditingController();
   final TextEditingController _fatoraNameController = TextEditingController();
   final TextEditingController _fatoraIdController = TextEditingController();
@@ -44,6 +45,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
   String? numberMoveErrorMessage;
   String? numberDeviceErrorMessage;
   String? arrowMoveMessage;
+  String? fatoraSenderErrorMessage;
   Fatora _fatora = Fatora();
   FatoraBloc get fatoraBloc => BlocProvider.of<FatoraBloc>(context);
 
@@ -69,9 +71,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
     _fatoraSuccessController.text = fatoraSuccess.first;
     _fatoraDateController.text = DateFormat.yMd('en_US').format(DateTime.now());
     _fatoraTimeController.text = DateFormat.jm('en_US')
-        .format(DateTime.now())
-        .replaceAll("PM", "مساء")
-        .replaceAll("AM", "صباحا");
+        .format(DateTime.now());
   }
 
   @override
@@ -162,10 +162,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
               keyboardType: TextInputType.number,
               onChanged: (String value) {
                 //separate value with comma for each 3 digits
-                value = value.toString().replaceAllMapped(
-                      RegExp(r'(\d{1,2})(?=(\d{2})+(?!\d))'),
-                      (Match m) => '${m[2]},',
-                    );
+                value = value.toString();
                 _fatoraPriceController.text = value; // "IQD $value";
               },
             ),
@@ -194,6 +191,23 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                   fatoraIdErrorMessage = null;
                 } else {
                   fatoraIdErrorMessage = "يجب ان يكون 16 رقم";
+                }
+                setState(() {});
+              },
+            ),
+            const SizedBox(height: 20),
+            CustomTextFieldWidget(
+              hintText: "بطاقة المرسل",
+              textEditingController: _fatoraSenderController,
+              keyboardType: TextInputType.number,
+              errorMessage: fatoraSenderErrorMessage,
+              maxLength: 16,
+              onChanged: (String value) {
+                _fatoraSenderController.text = value;
+                if (_fatoraSenderController.text.length == 16) {
+                  fatoraSenderErrorMessage = null;
+                } else {
+                  fatoraSenderErrorMessage = "يجب ان يكون 16 رقم";
                 }
                 setState(() {});
               },
@@ -288,7 +302,8 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       numberArrivedErrorMessage == null &&
                       numberMoveErrorMessage == null &&
                       arrowMoveMessage == null &&
-                      numberDeviceErrorMessage == null) {
+                      numberDeviceErrorMessage == null&&
+                  fatoraSenderErrorMessage == null) {
                     //TODO: Add  data to fatora model
                     _fatora = Fatora(
                       date: storeDate==""?DateTime.now().toString():storeDate,
@@ -303,6 +318,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       name: _fatoraNameController.text,
                       paymentMethod: _paymentController.text,
                       time: _fatoraTimeController.text,
+                      fatoraSenderId: _fatoraSenderController.text,
                     );
                     //Todo: Add Fatora in database
                     fatoraBloc.add(AddFatoraEvent(fatora: _fatora));
@@ -327,6 +343,9 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
     if (_fatoraIdController.text.length != 16) {
       fatoraIdErrorMessage = "يجب ان يكون 16 رقم";
     }
+    if(_fatoraSenderController.text.isEmpty){
+      fatoraSenderErrorMessage = "يجب ان يكون 16 رقم";
+    }
     if (_fatoraNumberArrivedController.text.length != 4) {
       numberArrivedErrorMessage = "يجب ان يكون 4 رقم";
     }
@@ -336,6 +355,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
     if (_fatoraNumberDeviceController.text.length != 6) {
       numberDeviceErrorMessage = "يجب ان يكون 6 رقم";
     }
+
     setState(() {});
   }
 }

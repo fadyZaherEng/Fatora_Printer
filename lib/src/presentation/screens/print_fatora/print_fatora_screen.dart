@@ -10,6 +10,7 @@ import 'package:fatora/src/core/utils/show_action_dialog_widget.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/screens/bluetooth/bluetooth_screen.dart';
 import 'package:fatora/src/presentation/widgets/custom_button_widget.dart';
+import 'package:fatora/src/presentation/widgets/custom_text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,8 +32,10 @@ class PrintFatoraScreen extends BaseStatefulWidget {
 }
 
 class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
-  final GlobalKey _globalKeyForPrint =
-      GlobalKey(); // For identifying the widget
+  final GlobalKey _globalKeyForPrint = GlobalKey();
+
+  var _fatoraNameController =
+      TextEditingController(); // For identifying the widget
 
   @override
   Widget baseBuild(BuildContext context) {
@@ -139,7 +142,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: Row(
                               children: [
-                                Text(widget.fatora!.date,
+                                Text(widget.fatora!.date.split(" ")[0],
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
@@ -149,7 +152,10 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                                           fontWeight: FontWeight.w400,
                                         )),
                                 const Spacer(),
-                                Text(widget.fatora!.time,
+                                Text(
+                                    widget.fatora!.date
+                                        .split(" ")[1]
+                                        .split(".")[0],
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
@@ -281,7 +287,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  widget.fatora!.fatoraId.substring(0, 4),
+                                  widget.fatora!.fatoraSenderId.substring(0, 4),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -304,9 +310,9 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                                 ),
                                 Text(
                                   //get last 4 digits sorted from right to left
-                                  widget.fatora!.fatoraId.substring(
-                                      widget.fatora!.fatoraId.length - 4,
-                                      widget.fatora!.fatoraId.length),
+                                  widget.fatora!.fatoraSenderId.substring(
+                                      widget.fatora!.fatoraSenderId.length - 4,
+                                      widget.fatora!.fatoraSenderId.length),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -320,16 +326,25 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Text(
-                            widget.fatora!.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: ColorSchemes.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                          // Text(
+                          //   widget.fatora!.name,
+                          //   style: Theme.of(context)
+                          //       .textTheme
+                          //       .titleMedium
+                          //       ?.copyWith(
+                          //         color: ColorSchemes.black,
+                          //         fontSize: 16,
+                          //         fontWeight: FontWeight.w500,
+                          //       ),
+                          // ),
+                          //
+                          CustomTextFieldWidget(
+                            hintText: "الاسم",
+                            textEditingController: _fatoraNameController,
+                            keyboardType: TextInputType.text,
+                            onChanged: (String value) {
+                              _fatoraNameController.text = value;
+                            },
                           ),
                           const SizedBox(height: 10),
                           // SvgPicture.asset(
@@ -384,7 +399,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                     Expanded(
                       child: CustomButtonWidget(
                         onTap: () {
-
                           _connectWithBluetoothPrinter();
                         },
                         buttonBorderRadius: 34,
@@ -565,22 +579,22 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         });
   }
 
-  void _connectWithBluetoothPrinter()async {
+  void _connectWithBluetoothPrinter() async {
     if (await PermissionServiceHandler().handleServicePermission(
         setting: PermissionServiceHandler.getStorageFilesPermission(
-          androidDeviceInfo:
+      androidDeviceInfo:
           Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null,
-        ))) {
+    ))) {
       RenderRepaintBoundary boundary = _globalKeyForPrint.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
 
       // Convert the widget to an image
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
       ByteData? byteData =
-      await image.toByteData(format: ui.ImageByteFormat.png);
+          await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
       // Update the state with the captured image
-        _imageBytes = pngBytes; // Set the image bytes to display later
+      _imageBytes = pngBytes; // Set the image bytes to display later
     } else {
       _dialogMessage(
           icon: ImagePaths.warning,
@@ -599,7 +613,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => PrintScreen(
-           imageBytes:   _imageBytes!,
+            imageBytes: _imageBytes!,
           ),
         ),
       );
