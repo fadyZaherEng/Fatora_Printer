@@ -225,21 +225,24 @@ class _PrintScreenState extends State<PrintScreen> {
                 child: ListView.builder(
                   itemCount: devicesList.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(devicesList[index].name.toString()),
-                          Text(devicesList[index].id.toString()),
-                          Container(
-                            height: 1,
-                            color: Colors.grey,
-                            margin: const EdgeInsets.symmetric(vertical: 10),
+                    return InkWell(
+                      onTap: () => connectToDevice(devicesList[index]),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(devicesList[index].name.toString()),
+                            Text(devicesList[index].id.toString()),
+                            Container(
+                              height: 1,
+                              color: Colors.grey,
+                              margin: const EdgeInsets.symmetric(vertical: 10),
 
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     );
                   },
