@@ -6,6 +6,9 @@
 <true/>
 <dict>
 
+<dict>
+	    <key>NSBluetoothAlwaysUsageDescription</key>
+	    <string>Need BLE permission</string>
 	    <key>NSBluetoothPeripheralUsageDescription</key>
 	    <string>Need BLE permission</string>
 	    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -14,8 +17,6 @@
 	    <string>Need Location permission</string>
 	    <key>NSLocationWhenInUseUsageDescription</key>
 	    <string>Need Location permission</string>
-<key>NSBluetoothAlwaysUsageDescription</key>
-<string>We need access to Bluetooth to connect to printers.</string>
 
  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>Description</string>
