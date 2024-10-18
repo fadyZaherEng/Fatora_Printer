@@ -34,13 +34,17 @@ class _HistoryScreenState extends BaseState<HistoryScreen> {
     Map<String, List<Fatora>> groupedByDay = {};
 
     for (var fatora in fatoraList) {
-      String dayName = DateFormat('EEEE').format(fatora.date == ""
-          ? DateTime.now()
-          : DateTime.parse(fatora.date)); // Get day name
-      if (groupedByDay[dayName] == null) {
-        groupedByDay[dayName] = [];
+      try {
+        String dayName = DateFormat('EEEE').format(fatora.date == ""
+            ? DateTime.now()
+            : DateTime.parse(fatora.date)); // Get day name
+        if (groupedByDay[dayName] == null) {
+          groupedByDay[dayName] = [];
+        }
+        groupedByDay[dayName]!.add(fatora);
+      } catch (e) {
+        print(e);
       }
-      groupedByDay[dayName]!.add(fatora);
     }
     return groupedByDay;
   }

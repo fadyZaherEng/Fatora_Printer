@@ -149,10 +149,10 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
               keyboardType: TextInputType.text,
               onSuffixTap: (selectedValue) {
                 setState(() {
-                  _paymentController.text = selectedValue;
+                  _fatoraStatusController.text = selectedValue;
                 });
               },
-              list: paymentOptions,
+              list: fatoraStatus,
             ),
             const SizedBox(height: 20),
             CustomTextFieldPriceWidget(
@@ -176,10 +176,10 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
               keyboardType: TextInputType.text,
               onSuffixTap: (selectedValue) {
                 setState(() {
-                  _paymentController.text = selectedValue;
+                  _fatoraSuccessController.text = selectedValue;
                 });
               },
-              list: paymentOptions,
+              list: fatoraSuccess,
             ),
             const SizedBox(height: 20),
             CustomTextFieldWidget(
@@ -291,7 +291,7 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                       numberDeviceErrorMessage == null) {
                     //TODO: Add  data to fatora model
                     _fatora = Fatora(
-                      date: storeDate==""?_fatoraDateController.text:storeDate,
+                      date: storeDate==""?DateTime.now().toString():storeDate,
                       status: _fatoraStatusController.text,
                       price: "${_fatoraPriceController.text} IQD",
                       statusSuccess: _fatoraSuccessController.text,

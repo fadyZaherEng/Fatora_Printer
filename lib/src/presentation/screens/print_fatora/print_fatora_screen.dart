@@ -519,7 +519,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: ColorSchemes.white,
-            content: Text('Image saved to Gallery',
+            content: Text('تم تحميل الفاتورة بنجاح الى المعرض',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: ColorSchemes.black,
