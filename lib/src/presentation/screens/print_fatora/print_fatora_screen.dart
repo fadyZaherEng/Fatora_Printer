@@ -9,6 +9,7 @@ import 'package:fatora/src/core/utils/permission_service_handler.dart';
 import 'package:fatora/src/core/utils/show_action_dialog_widget.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/screens/bluetooth/bluetooth_screen.dart';
+import 'package:fatora/src/presentation/screens/bluetooth/test.dart';
 import 'package:fatora/src/presentation/widgets/custom_button_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +35,7 @@ class PrintFatoraScreen extends BaseStatefulWidget {
 class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
   final GlobalKey _globalKeyForPrint = GlobalKey();
 
-  var _fatoraNameController =
-      TextEditingController(); // For identifying the widget
+  final _fatoraNameController = TextEditingController();
 
   @override
   Widget baseBuild(BuildContext context) {
@@ -130,12 +130,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                                 ),
                           ),
                           const SizedBox(height: 10),
-                          // SvgPicture.asset(
-                          //   ImagePaths.group,
-                          //   width: MediaQuery.of(context).size.width,
-                          //   height: 5,
-                          //   fit: BoxFit.fitWidth,
-                          // ),
                           _buildArrowWidget(),
                           const SizedBox(height: 10),
                           Padding(
@@ -168,12 +162,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          // SvgPicture.asset(
-                          //   ImagePaths.group,
-                          //   width: MediaQuery.of(context).size.width,
-                          //   height: 5,
-                          //   fit: BoxFit.fitWidth,
-                          // ),
                           _buildArrowWidget(),
                           const SizedBox(height: 15),
                           Text(
@@ -326,18 +314,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          // Text(
-                          //   widget.fatora!.name,
-                          //   style: Theme.of(context)
-                          //       .textTheme
-                          //       .titleMedium
-                          //       ?.copyWith(
-                          //         color: ColorSchemes.black,
-                          //         fontSize: 16,
-                          //         fontWeight: FontWeight.w500,
-                          //       ),
-                          // ),
-                          //
+
                           CustomTextFieldWidget(
                             hintText: "الاسم",
                             textEditingController: _fatoraNameController,
@@ -347,12 +324,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                             },
                           ),
                           const SizedBox(height: 10),
-                          // SvgPicture.asset(
-                          //   ImagePaths.group,
-                          //   width: MediaQuery.of(context).size.width,
-                          //   height: 5,
-                          //   fit: BoxFit.fitWidth,
-                          // ),
                           _buildArrowWidget(),
                           const SizedBox(height: 10),
                           //add some space
@@ -380,12 +351,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                                   ]),
                             ),
                           ),
-                          // SvgPicture.asset(
-                          //   ImagePaths.group,
-                          //   width: MediaQuery.of(context).size.width,
-                          //   height: 5,
-                          //   fit: BoxFit.fitWidth,
-                          // ),
                           _buildArrowWidget(),
                           const SizedBox(height: 10),
                         ],
@@ -422,12 +387,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                // // Display the captured image here, if available
-                // _imageBytes != null
-                //     ? Image.memory(
-                //         _imageBytes!) // Display the image using Image.memory
-                //     : Text('Captured image will appear here'),
-                // // Placeholder text
               ],
             ),
           ),
@@ -612,7 +571,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PrintScreen(
+          builder: (context) => TestPrintScreen(
             imageBytes: _imageBytes!,
           ),
         ),
