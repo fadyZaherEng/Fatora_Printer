@@ -7,7 +7,9 @@ import 'package:flutter/services.dart';
 
 class TestPrintScreen extends StatefulWidget {
   final Uint8List imageBytes;
+
   const TestPrintScreen({super.key, required this.imageBytes});
+
   @override
   _TestPrintScreenState createState() => _TestPrintScreenState();
 }
@@ -109,7 +111,9 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
           padding: const EdgeInsets.all(8.0),
           child: ListView(
             children: <Widget>[
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               const Center(child: Text("اختر الجهاز الذي تريد الطباعة")),
               const SizedBox(height: 10),
               Icon(
@@ -153,7 +157,8 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.brown),
                     onPressed: () {
                       initPlatformState();
                     },
@@ -167,7 +172,8 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: _connected ? Colors.red : Colors.green),
+                        backgroundColor:
+                            _connected ? Colors.red : Colors.green),
                     onPressed: _connected ? _disconnect : _connect,
                     child: Text(
                       _connected ? 'غير متصل' : 'اتصال',
@@ -176,17 +182,16 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
                   ),
                 ],
               ),
-
               const SizedBox(
                 height: 20,
               ),
               Image.memory(widget.imageBytes, width: 200, height: 200),
-
               Padding(
                 padding:
-                const EdgeInsets.only(left: 10.0, right: 10.0, top: 50),
+                    const EdgeInsets.only(left: 10.0, right: 10.0, top: 50),
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.brown),
                   onPressed: () {
                     // BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
                     bluetooth.isConnected.then((isConnected) {
@@ -197,11 +202,15 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
                         bluetooth.paperCut(); //some printer not supported (sometime making image not centered)
                         //bluetooth.drawerPin2(); // or you can use bluetooth.drawerPin5();
                         show("تم الطباعة بنجاح");
+                      } else {
+                        show("لا يوجد جهاز متصل بالبلوتوث");
                       }
                     });
                   },
-                  child: const Text('طباعة',
-                      style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    'طباعة',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -244,7 +253,7 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
           });
           setState(() => _connected = true);
           show('تم الاتصال بنجاح.');
-        }else{
+        } else {
           setState(() => _connected = false);
           show('لا يوجد جهاز متصل بالبلوتوث.');
         }
@@ -259,8 +268,7 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
     setState(() => _connected = false);
   }
 
-  Future show(
-      String message) async {
+  Future show(String message) async {
     await Future.delayed(const Duration(milliseconds: 100));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

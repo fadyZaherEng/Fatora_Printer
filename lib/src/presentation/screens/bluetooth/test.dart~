@@ -244,6 +244,9 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
           });
           setState(() => _connected = true);
           show('تم الاتصال بنجاح.');
+        }else{
+          setState(() => _connected = false);
+          show('لا يوجد جهاز متصل بالبلوتوث.');
         }
       });
     } else {

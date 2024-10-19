@@ -161,7 +161,7 @@ class FatoraTablesWidget extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(1.0),
                                           child: Text(
-                                            "عرض",
+                                            "view",
                                             style: TextStyle(
                                                 color: ColorSchemes.primary),
                                           ),
