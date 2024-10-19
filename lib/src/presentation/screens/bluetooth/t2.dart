@@ -9,6 +9,7 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:esc_pos_utils/esc_pos_utils.dart';
 
 // class BluetoothPrinter {
 //   BluetoothConnection? connection;
@@ -118,15 +119,46 @@ class BluetoothPrinter {
   }
 
   // Print image
-  Future<void> printImage(Uint8List imageBytes) async {
-    // Simulate sending image data to the printer (this would be ESC/POS formatting in real use)
-    connection?.output.add(imageBytes);
-    await connection?.output.allSent;
+  // Future<void> printImage(Uint8List imageBytes) async {
+  //   // Simulate sending image data to the printer (this would be ESC/POS formatting in real use)
+  //   connection?.output.add(imageBytes);
+  //   await connection?.output.allSent;
+  //
+  //   // Send a cut command (optional)
+  //   connection?.output.add(
+  //       Uint8List.fromList([0x1D, 0x56, 0x42, 0x00])); // ESC/POS Cut command
+  //   await connection?.output.allSent;
+  // }
+  Future<void> printImage(Uint8List imageData) async {
+    // Load a profile for the printer (ESC/POS printers often use a default profile)
+    final profile = await CapabilityProfile.load();
 
-    // Send a cut command (optional)
-    connection?.output.add(
-        Uint8List.fromList([0x1D, 0x56, 0x42, 0x00])); // ESC/POS Cut command
-    await connection?.output.allSent;
+    // Create an ESC/POS generator with the appropriate paper size (adjust size as needed)
+    final generator = Generator(PaperSize.mm80, profile);
+
+    // Decode the image using the 'image' package (convert Uint8List to a usable format)
+    final image = img.decodeImage(imageData); // Assuming you are using the 'image' package for decoding
+
+    if (image == null) {
+      print('Failed to decode image');
+      return;
+    }
+
+    // Convert the image to ESC/POS commands using the generator
+    final List<int> ticket = generator.image(image);
+
+    try {
+
+      // Send the image data (ESC/POS formatted commands) to the printer
+      connection?.output.add(Uint8List.fromList(ticket));
+      await connection?.output.allSent;
+      print('Image data sent to the printer');
+
+      // Close the connection
+      connection?.finish();
+    } catch (e) {
+      print('Error occurred while connecting/sending: $e');
+    }
   }
 }
 
@@ -217,13 +249,9 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
           content: Text("من فضلك قم بتحديد الجهاز الذي تريد طباعة الفاتورة")));
       return;
     }
-
-    Uint8List? screenshot = await screenshotController.capture();
-    if (screenshot != null) {
       await bluetoothPrinter.connectToDevice(selectedDevice!, context);
-      await bluetoothPrinter.printImage(screenshot);
+      await bluetoothPrinter.printImage(widget.imageBytes);
       bluetoothPrinter.disconnect(context);
-    }
   }
 
   @override
@@ -267,7 +295,8 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
                       ),
               ),
               const SizedBox(height: 10),
-              Image.memory(widget.imageBytes, width: 200, height: 200),
+              // Image
+              // Image.memory(widget.imageBytes, width: 200, height: 200),
               const SizedBox(height: 10),
               // Print button
               Padding(
