@@ -26,6 +26,7 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
   }
 
   Future<void> initPlatformState() async {
+    _devices = [];
     bool? isConnected = await bluetooth.isConnected;
     List<BluetoothDevice> devices = [];
     try {
@@ -103,91 +104,114 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: <Widget>[
-            const SizedBox(height: 20,),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(
-                  width: 10,
-                ),
-                const Text(
-                  'Device:',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            children: <Widget>[
+              const SizedBox(height: 20,),
+              const Center(child: Text("اختر الجهاز الذي تريد الطباعة")),
+              const SizedBox(height: 10),
+              Icon(
+                Icons.bluetooth,
+                size: 60,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(height: 10),
+              if (_devices.isEmpty) const LinearProgressIndicator(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const SizedBox(
+                    width: 10,
                   ),
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                Expanded(
-                  child: DropdownButton(
-                    items: _getDeviceItems(),
-                    onChanged: (BluetoothDevice? value) =>
-                        setState(() => _device = value),
-                    value: _device,
+                  const Text(
+                    'Device:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                ElevatedButton(
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  Expanded(
+                    child: DropdownButton(
+                      items: _getDeviceItems(),
+                      onChanged: (BluetoothDevice? value) =>
+                          setState(() => _device = value),
+                      value: _device,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
+                    onPressed: () {
+                      initPlatformState();
+                    },
+                    child: const Text(
+                      'تحديث',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: _connected ? Colors.red : Colors.green),
+                    onPressed: _connected ? _disconnect : _connect,
+                    child: Text(
+                      _connected ? 'غير متصل' : 'اتصال',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(
+                height: 20,
+              ),
+              Image.memory(widget.imageBytes, width: 200, height: 200),
+
+              Padding(
+                padding:
+                const EdgeInsets.only(left: 10.0, right: 10.0, top: 50),
+                child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
                   onPressed: () {
-                    initPlatformState();
+                    // BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
+                    bluetooth.isConnected.then((isConnected) {
+                      if (isConnected == true) {
+                        bluetooth.printNewLine();
+                        bluetooth.printImageBytes(widget.imageBytes); //image from Asset
+                        bluetooth.printNewLine();
+                        bluetooth.paperCut(); //some printer not supported (sometime making image not centered)
+                        //bluetooth.drawerPin2(); // or you can use bluetooth.drawerPin5();
+                        show("تم الطباعة بنجاح");
+                      }
+                    });
                   },
-                  child: const Text(
-                    'Refresh',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: const Text('طباعة',
+                      style: TextStyle(color: Colors.white)),
                 ),
-                const SizedBox(
-                  width: 20,
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: _connected ? Colors.red : Colors.green),
-                  onPressed: _connected ? _disconnect : _connect,
-                  child: Text(
-                    _connected ? 'Disconnect' : 'Connect',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding:
-              const EdgeInsets.only(left: 10.0, right: 10.0, top: 50),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
-                onPressed: () {
-                  BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
-
-                  bluetooth.isConnected.then((isConnected) {
-                    if (isConnected == true) {
-                      bluetooth.printNewLine();
-                      bluetooth.printImageBytes(widget.imageBytes); //image from Asset
-                      bluetooth.printNewLine();
-                      bluetooth.paperCut(); //some printer not supported (sometime making image not centered)
-                      //bluetooth.drawerPin2(); // or you can use bluetooth.drawerPin5();
-                    }
-                  });
-                },
-                child: const Text('PRINT TEST',
-                    style: TextStyle(color: Colors.white)),
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              Center(
+                child: Text(_device != null
+                    ? 'متصل ب ${_device!.name}'
+                    : 'لا يوجد جهاز متصل بالبلوتوث'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -197,13 +221,13 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
     List<DropdownMenuItem<BluetoothDevice>> items = [];
     if (_devices.isEmpty) {
       items.add(const DropdownMenuItem(
-        child: Text('NONE'),
+        child: Text('لا يوجد جهازات'),
       ));
     } else {
-      for (var device in _devices) {
+      for (BluetoothDevice device in _devices) {
         items.add(DropdownMenuItem(
           value: device,
-          child: Text(device.name ?? ""),
+          child: Text(device.name.toString() ?? ""),
         ));
       }
     }
@@ -216,12 +240,14 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
         if (isConnected == true) {
           bluetooth.connect(_device!).catchError((error) {
             setState(() => _connected = false);
+            show(error.toString());
           });
           setState(() => _connected = true);
+          show('تم الاتصال بنجاح.');
         }
       });
     } else {
-      show('No device selected.');
+      show('لا يوجد جهاز محدد.');
     }
   }
 
