@@ -11,6 +11,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   double? height;
   String? errorMessage;
   int? maxLength;
+  bool isPrefixIcon ;
 
   CustomTextFieldWidget({
     super.key,
@@ -21,6 +22,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     required this.onChanged,
     this.errorMessage,
     this.maxLength,
+    this.isPrefixIcon =true,
   });
 
   @override
@@ -58,7 +60,7 @@ class CustomTextFieldWidget extends StatelessWidget {
               errorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: ColorSchemes.redError),
               ),
-              prefixIcon: Container(
+              prefixIcon:isPrefixIcon? Container(
                 width: 50,
                 height: height,
                 margin: const EdgeInsetsDirectional.only(end: 8.0),
@@ -72,7 +74,7 @@ class CustomTextFieldWidget extends StatelessWidget {
                         letterSpacing: -0.13,
                       ),
                 ),
-              ),
+              ):null,
             ),
             onChanged: (value) {
               onChanged(value);

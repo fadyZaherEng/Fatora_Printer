@@ -127,18 +127,14 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(
-                    width: 10,
-                  ),
+                  const SizedBox(width: 10),
                   const Text(
                     'Device:',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(
-                    width: 30,
-                  ),
+                  const SizedBox(width: 30),
                   Expanded(
                     child: DropdownButton(
                       items: _getDeviceItems(),
@@ -149,9 +145,7 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -167,9 +161,7 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
+                  const SizedBox(width: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor:
@@ -182,9 +174,7 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Image.memory(widget.imageBytes, width: 200, height: 200),
               Padding(
                 padding:
@@ -194,18 +184,21 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
                       ElevatedButton.styleFrom(backgroundColor: Colors.brown),
                   onPressed: () {
                     // BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
-                    bluetooth.isConnected.then((isConnected) {
-                      if (isConnected == true) {
-                        bluetooth.printNewLine();
-                        bluetooth.printImageBytes(widget.imageBytes); //image from Asset
-                        bluetooth.printNewLine();
-                        bluetooth.paperCut(); //some printer not supported (sometime making image not centered)
-                        //bluetooth.drawerPin2(); // or you can use bluetooth.drawerPin5();
-                        show("تم الطباعة بنجاح");
-                      } else {
-                        show("لا يوجد جهاز متصل بالبلوتوث");
-                      }
-                    });
+                    bluetooth.isConnected.then(
+                      (isConnected) {
+                        if (isConnected == true) {
+                          bluetooth.printNewLine();
+                          bluetooth.printImageBytes(widget.imageBytes);
+                          bluetooth.printNewLine();
+                          bluetooth
+                              .paperCut(); //some printer not supported (sometime making image not centered)
+                          //bluetooth.drawerPin2(); // or you can use bluetooth.drawerPin5();
+                          show("تم الطباعة بنجاح");
+                        } else {
+                          show("لا يوجد جهاز متصل بالبلوتوث");
+                        }
+                      },
+                    );
                   },
                   child: const Text(
                     'طباعة',
@@ -215,9 +208,11 @@ class _TestPrintScreenState extends State<TestPrintScreen> {
               ),
               const SizedBox(height: 20),
               Center(
-                child: Text(_device != null
-                    ? 'متصل ب ${_device!.name}'
-                    : 'لا يوجد جهاز متصل بالبلوتوث'),
+                child: Text(
+                  _device != null
+                      ? 'متصل ب ${_device!.name}'
+                      : 'لا يوجد جهاز متصل بالبلوتوث',
+                ),
               ),
             ],
           ),

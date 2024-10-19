@@ -64,7 +64,7 @@ dependencies:
   esc_pos_printer: ^4.1.0
   esc_pos_utils: ^1.0.0
   flutter_bluetooth_serial: ^0.4.0
-  screenshot:
+  screenshot: 
 
 #  esc_pos_printer: ^4.0.6
 #  esc_pos_utils: ^1.0.0

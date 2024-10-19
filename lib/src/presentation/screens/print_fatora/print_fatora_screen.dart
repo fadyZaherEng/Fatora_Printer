@@ -9,6 +9,7 @@ import 'package:fatora/src/core/utils/permission_service_handler.dart';
 import 'package:fatora/src/core/utils/show_action_dialog_widget.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/screens/bluetooth/bluetooth_screen.dart';
+import 'package:fatora/src/presentation/screens/bluetooth/t2.dart';
 import 'package:fatora/src/presentation/screens/bluetooth/test.dart';
 import 'package:fatora/src/presentation/widgets/custom_button_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_field_widget.dart';
@@ -317,6 +318,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
 
                           CustomTextFieldWidget(
                             hintText: "الاسم",
+                            isPrefixIcon: false,
                             textEditingController: _fatoraNameController,
                             keyboardType: TextInputType.text,
                             onChanged: (String value) {
@@ -571,7 +573,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => TestPrintScreen(
+          builder: (context) => PrintScreenApp(
             imageBytes: _imageBytes!,
           ),
         ),

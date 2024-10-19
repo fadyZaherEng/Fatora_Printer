@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print, must_be_immutable
-import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/resources/image_paths.dart';
 import 'package:fatora/src/core/utils/permission_service_handler.dart';
 import 'package:fatora/src/core/utils/show_action_dialog_widget.dart';
