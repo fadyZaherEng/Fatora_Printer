@@ -109,16 +109,10 @@ class PrintScreenApp extends StatefulWidget {
 }
 
 class _PrintScreenAppState extends State<PrintScreenApp> {
-  ScreenshotController screenshotController = ScreenshotController();
   BluetoothPrinter bluetoothPrinter = BluetoothPrinter();
   List<BluetoothDevice> devices = [];
   BluetoothDevice? selectedDevice;
 
-  @override
-  void initState() {
-    super.initState();
-    _getBluetoothDevices();
-  }
 
   @override
   void didChangeDependencies() async {

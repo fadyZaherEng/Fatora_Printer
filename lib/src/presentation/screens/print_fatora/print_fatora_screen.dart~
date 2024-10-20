@@ -320,8 +320,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     ))) {
       _imageBytes = await createImageFromWidget(
         _buildFatoraDetails(isPrint: true),
-        // logicalSize: const Size(500, 500),
-        // imageSize: const Size(680, 680),
+        logicalSize: const Size(500, 500),
+        imageSize: const Size(680, 680),
       );
     } else {
       _dialogMessage(

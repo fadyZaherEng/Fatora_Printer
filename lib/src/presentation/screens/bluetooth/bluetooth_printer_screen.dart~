@@ -11,84 +11,13 @@ import 'dart:ui' as ui;
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:fatora/src/presentation/screens/bluetooth/widgets/printer_widgets.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as AnotherImage;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
 
-// class BluetoothPrinter {
-//   BluetoothConnection? connection;
-//
-//   Future<void> printImage(Uint8List imageBytes) async {
-//     // Decode the image
-//     img.Image? originalImage = img.decodeImage(imageBytes);
-//
-//     // Convert to black-and-white and resize to the correct width
-//     img.Image resizedImage = img.copyResize(originalImage!, width: 384);
-//     img.Image bwImage = img.grayscale(resizedImage);
-//
-//     // Convert to ESC/POS compatible bytes
-//     List<int> imageEscPosBytes = _convertImageToEscPos(bwImage);
-//
-//     // Send the bytes to the printer
-//     connection?.output.add(Uint8List.fromList(imageEscPosBytes));
-//     await connection?.output.allSent;
-//
-//     // Send a cut command (optional)
-//     connection?.output.add(Uint8List.fromList([0x1D, 0x56, 0x42, 0x00])); // ESC/POS Cut command
-//     await connection?.output.allSent;
-//   }
-//
-//   List<int> _convertImageToEscPos(img.Image image) {
-//     // Example: Convert image to ESC/POS commands for printing
-//     // This part depends on your printer's ESC/POS implementation
-//     // Typically, you send pixel data in rows as bytes
-//     List<int> bytes = [];
-//     bytes.addAll([0x1D, 0x76, 0x30, 0x00]); // ESC/POS command for printing bit images
-//
-//     int width = image.width;
-//     int height = image.height;
-//
-//     // Convert image pixels row by row
-//     for (int y = 0; y < height; y++) {
-//       for (int x = 0; x < width; x += 8) {
-//         int byte = 0;
-//         for (int bit = 0; bit < 8; bit++) {
-//           if (x + bit < width) {
-//             int pixel = image.getPixel(x + bit, y);
-//             int luma = img.getLuminance(pixel); // Get brightness
-//             if (luma < 128) {
-//               byte |= (1 << (7 - bit));
-//             }
-//           }
-//         }
-//         bytes.add(byte);
-//       }
-//     }
-//
-//     return bytes;
-//   }
-//   // Scan and connect to a Bluetooth device
-//   Future<void> connectToDevice(BluetoothDevice device) async {
-//     try {
-//       connection = await BluetoothConnection.toAddress(device.address);
-//       print('Connected to ${device.name}');
-//     } catch (e) {
-//       print('Failed to connect: $e');
-//     }
-//   }
-//
-//   // Disconnect Bluetooth connection
-//   void disconnect() {
-//     if (connection != null) {
-//       connection!.finish();
-//       print('Disconnected');
-//     }
-//   }
-// }
+
 class BluetoothPrinter {
   BluetoothConnection? connection;
 

@@ -340,7 +340,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => PrintScreenApp(
-            imageBytes: _imageBytes!,
+            imageBytes: _imageBytes?? Uint8List(0),
           ),
         ),
       );
