@@ -249,7 +249,6 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
           content: Text("من فضلك قم بتحديد الجهاز الذي تريد طباعة الفاتورة")));
       return;
     }
-      await bluetoothPrinter.connectToDevice(selectedDevice!, context);
       await bluetoothPrinter.printImage(widget.imageBytes);
       bluetoothPrinter.disconnect(context);
   }
@@ -285,9 +284,11 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
                             trailing: selectedDevice == device
                                 ? const Icon(Icons.check, color: Colors.green)
                                 : null,
-                            onTap: () {
-                              setState(() {
+                            onTap: () async {
                                 selectedDevice = device;
+                                await bluetoothPrinter.connectToDevice(selectedDevice!, context);
+                              setState(() {
+
                               });
                             },
                           );
