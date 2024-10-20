@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'dart:typed_data';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fatora/main.dart';
@@ -189,7 +188,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
       ))) {
         RenderRepaintBoundary boundary = _globalKeyForPrint.currentContext!
             .findRenderObject() as RenderRepaintBoundary;
-
         // Convert the widget to an image
         ui.Image image = await boundary.toImage(pixelRatio: 3.0);
         ByteData? byteData =
@@ -204,16 +202,20 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
             _imageBytes ?? Uint8List.fromList([]),
             quality: 100);
         print(result); // Prints the saved path in the gallery
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
             backgroundColor: ColorSchemes.white,
-            content: Text('تم تحميل الفاتورة بنجاح الى المعرض',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: ColorSchemes.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ))));
+            content: Text(
+              'تم تحميل الفاتورة بنجاح الى المعرض',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: ColorSchemes.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+            ),
+          ),
+        );
       } else {
         _dialogMessage(
             icon: ImagePaths.warning,
@@ -271,31 +273,25 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
           textDirection: TextDirection.ltr,
           child: widget,
         )).attachToRenderTree(buildOwner);
-
     buildOwner.buildScope(rootElement);
-
     // Delay if specified
     if (wait != null) {
       await Future.delayed(wait);
     }
-
-// Build and finalize the render tree
+    // Build and finalize the render tree
     buildOwner
       ..buildScope(rootElement)
       ..finalizeTree();
-
-// Flush layout, compositing, and painting operations
+    // Flush layout, compositing, and painting operations
     pipelineOwner
       ..flushLayout()
       ..flushCompositingBits()
       ..flushPaint();
-
-// Capture the image and convert it to byte data
+    // Capture the image and convert it to byte data
     final image = await repaintBoundary.toImage(
         pixelRatio: imageSize.width / logicalSize.width);
     final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-
-// Return the image data as Uint8List
+    // Return the image data as Uint8List
     return byteData?.buffer.asUint8List();
   }
 
@@ -306,17 +302,18 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     Function()? secondaryAction,
   }) {
     showActionDialogWidget(
-        context: context,
-        text: message,
-        icon: icon,
-        primaryText: "نعم",
-        secondaryText: "لا",
-        primaryAction: () async {
-          primaryAction();
-        },
-        secondaryAction: () {
-          secondaryAction ?? Navigator.pop(context);
-        });
+      context: context,
+      text: message,
+      icon: icon,
+      primaryText: "نعم",
+      secondaryText: "لا",
+      primaryAction: () async {
+        primaryAction();
+      },
+      secondaryAction: () {
+        secondaryAction ?? Navigator.pop(context);
+      },
+    );
   }
 
   void _connectWithBluetoothPrinter() async {
@@ -337,9 +334,11 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         primaryAction: () async {
           Navigator.pop(context);
           openAppSettings().then((value) async {
-            if (await PermissionServiceHandler()
-                .handleServicePermission(setting: Permission.storage)) {}
-          });
+              if (await PermissionServiceHandler().handleServicePermission(
+                setting: Permission.storage,
+              )) {}
+            },
+          );
         },
       );
     }
@@ -529,7 +528,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         ),
         const SizedBox(height: 10),
         Directionality(
-          textDirection: TextDirection.ltr,
+          textDirection: TextDirection.rtl,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -586,23 +585,26 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         isPrint ? divider() : _buildArrowWidget(),
         const SizedBox(height: 10),
         //add some space
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildItemNumber("رقم الايصال", widget.fatora!.numberArrived),
-                const SizedBox(height: 10),
-                _buildItemNumber("رقم الحركة", widget.fatora!.numberMove),
-                const SizedBox(height: 10),
-                _buildItemNumber("رقم الجهاز", widget.fatora!.deviceNumber),
-                const SizedBox(height: 10),
-                _buildItemNumber("رقم التاجر", widget.fatora!.traderNumber),
-                const SizedBox(height: 10),
-              ],
+        Directionality(
+          textDirection: TextDirection.rtl,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildItemNumber("رقم الايصال", widget.fatora!.numberArrived),
+                  const SizedBox(height: 10),
+                  _buildItemNumber("رقم الحركة", widget.fatora!.numberMove),
+                  const SizedBox(height: 10),
+                  _buildItemNumber("رقم الجهاز", widget.fatora!.deviceNumber),
+                  const SizedBox(height: 10),
+                  _buildItemNumber("رقم التاجر", widget.fatora!.traderNumber),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
           ),
         ),
