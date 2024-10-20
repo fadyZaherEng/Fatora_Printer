@@ -10,7 +10,7 @@ import 'package:fatora/src/core/utils/permission_service_handler.dart';
 import 'package:fatora/src/core/utils/show_action_dialog_widget.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/screens/bluetooth/bluetooth_screen.dart';
-import 'package:fatora/src/presentation/screens/bluetooth/t2.dart';
+import 'package:fatora/src/presentation/screens/bluetooth/bluetooth_printer_screen.dart';
 import 'package:fatora/src/presentation/screens/bluetooth/test.dart';
 import 'package:fatora/src/presentation/widgets/custom_button_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_field_widget.dart';
@@ -302,8 +302,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         context: context,
         text: message,
         icon: icon,
-        primaryText: "Yes",
-        secondaryText: "No",
+        primaryText: "نعم",
+        secondaryText: "لا",
         primaryAction: () async {
           primaryAction();
         },
@@ -320,8 +320,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     ))) {
       _imageBytes = await createImageFromWidget(
         _buildFatoraDetails(isPrint: true),
-        logicalSize: const Size(500, 500),
-        imageSize: const Size(680, 680),
+        // logicalSize: const Size(500, 500),
+        // imageSize: const Size(680, 680),
       );
     } else {
       _dialogMessage(
