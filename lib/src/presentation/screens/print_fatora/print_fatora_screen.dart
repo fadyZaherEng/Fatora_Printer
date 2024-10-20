@@ -64,7 +64,9 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
               children: [
                 RepaintBoundary(
                   key: _globalKeyForPrint,
-                  child: _buildFatoraDetails(isPrint: false),
+                  child: Container(
+                      color: ColorSchemes.white,
+                      child: _buildFatoraDetails(isPrint: false)),
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -320,8 +322,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     ))) {
       _imageBytes = await createImageFromWidget(
         _buildFatoraDetails(isPrint: true),
-        logicalSize: const Size(500, 500),
-        imageSize: const Size(680, 680),
+        logicalSize: const Size(800, 800),
+        imageSize: const Size(950, 950),
       );
     } else {
       _dialogMessage(
@@ -340,7 +342,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => PrintScreenApp(
-            imageBytes: _imageBytes?? Uint8List(0),
+            imageBytes: _imageBytes!,
           ),
         ),
       );

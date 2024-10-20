@@ -234,7 +234,9 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
-                  onPressed: printTest(selectedDevice!.address),
+                  onPressed: (){
+                     printTest();
+                  },
                   child: const Text("طباعة الفاتورة"),
                 ),
               ),
@@ -244,9 +246,10 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
       ),
     );
   }
-  printTest(String ip) async {
+ void printTest()  async{
     log('printTest');
     try {
+      String ip=selectedDevice!.address;
       const PaperSize paper = PaperSize.mm80;
       final profile = await CapabilityProfile.load();
       final printerService = NetworkPrinter(paper, profile);
