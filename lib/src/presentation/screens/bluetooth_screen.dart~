@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print
+
 import 'dart:typed_data';
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/resources/image_paths.dart';
@@ -31,9 +32,11 @@ class _PrintScreenState extends State<PrintScreen> {
     super.didChangeDependencies();
     await requestPermissions();
   }
+
   // Request Bluetooth permissions
   Future<void> requestPermissions() async {
     // Request the necessary Bluetooth permissions
+
     if (mounted) {
       if (await PermissionServiceHandler()
               .handleServicePermission(setting: Permission.bluetoothConnect) &&
@@ -55,6 +58,7 @@ class _PrintScreenState extends State<PrintScreen> {
               });
             });
         // Handle the case when the user denies the permission
+        print("Bluetooth Scan permission denied");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: ColorSchemes.white,
@@ -72,13 +76,15 @@ class _PrintScreenState extends State<PrintScreen> {
   Future<void> scanForDevices() async {
     // Start scanning
     flutterBlue.startScan(timeout: const Duration(seconds: 4));
+
     // Listen to scan results
     flutterBlue.scanResults.listen((scanResults) {
       for (ScanResult result in scanResults) {
         discoveredDevices.add(result.device);
-        if(mounted){
-          setState(() {});
-        }
+        setState(() {});
+        print('Found device: ${result.device.name}');
+        print('Found device: ${result.device.id}');
+        print("length: ${discoveredDevices.length}");
       }
     });
 
@@ -100,9 +106,7 @@ class _PrintScreenState extends State<PrintScreen> {
         ),
       ),
     );
-    if(mounted){
-      setState(() {});
-    }
+    setState(() {});
   }
 
   // Print a Uint8List image
@@ -158,6 +162,7 @@ class _PrintScreenState extends State<PrintScreen> {
         );
       }
     } else {
+      print('Failed to decode image');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: ColorSchemes.white,
