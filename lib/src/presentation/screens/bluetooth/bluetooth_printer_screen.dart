@@ -4,12 +4,11 @@ import 'package:fatora/src/core/resources/image_paths.dart';
 import 'package:fatora/src/core/utils/permission_service_handler.dart';
 import 'package:fatora/src/core/utils/show_action_dialog_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:image/image.dart' as img;
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/services.dart';
-import 'package:image/image.dart' as AnotherImage;
+import 'package:image/image.dart' as anotherImage;
 import 'package:permission_handler/permission_handler.dart';
 
 class BluetoothPrinter {
@@ -20,17 +19,15 @@ class BluetoothPrinter {
       BluetoothDevice device, BuildContext context) async {
     try {
       connection = await BluetoothConnection.toAddress(device.address);
-      print('Connected to ${device.name}');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('تم الاتصال بنجاح'),
         ),
       );
     } catch (e) {
-      print('Failed to connect: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('فشل في الاتصال'),
+        SnackBar(
+          content: Text('${e.toString()} فشل في الاتصال'),
         ),
       );
     }
@@ -40,55 +37,11 @@ class BluetoothPrinter {
   void disconnect(context) {
     if (connection != null) {
       connection!.finish();
-      print('Disconnected');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('تم الغاء الاتصال بنجاح'),
         ),
       );
-    }
-  }
-
-  // Print image
-  // Future<void> printImage(Uint8List imageBytes) async {
-  //   // Simulate sending image data to the printer (this would be ESC/POS formatting in real use)
-  //   connection?.output.add(imageBytes);
-  //   await connection?.output.allSent;
-  //
-  //   // Send a cut command (optional)
-  //   connection?.output.add(
-  //       Uint8List.fromList([0x1D, 0x56, 0x42, 0x00])); // ESC/POS Cut command
-  //   await connection?.output.allSent;
-  // }
-  Future<void> printImage(Uint8List imageData) async {
-    // Load a profile for the printer (ESC/POS printers often use a default profile)
-    final profile = await CapabilityProfile.load();
-
-    // Create an ESC/POS generator with the appropriate paper size (adjust size as needed)
-    final generator = Generator(PaperSize.mm80, profile);
-
-    // Decode the image using the 'image' package (convert Uint8List to a usable format)
-    final image = img.decodeImage(
-        imageData); // Assuming you are using the 'image' package for decoding
-
-    if (image == null) {
-      print('Failed to decode image');
-      return;
-    }
-
-    // Convert the image to ESC/POS commands using the generator
-    final List<int> ticket = generator.image(image);
-
-    try {
-      // Send the image data (ESC/POS formatted commands) to the printer
-      connection?.output.add(Uint8List.fromList(ticket));
-      await connection?.output.allSent;
-      print('Image data sent to the printer');
-
-      // Close the connection
-      connection?.finish();
-    } catch (e) {
-      print('Error occurred while connecting/sending: $e');
     }
   }
 }
@@ -113,69 +66,38 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
     await requestPermissions();
   }
 
-  void _dialogMessage({
-    required String message,
-    required String icon,
-    required Function() primaryAction,
-    Function()? secondaryAction,
-  }) {
-    showActionDialogWidget(
-        context: context,
-        text: message,
-        icon: icon,
-        primaryText: "نعم",
-        secondaryText: "لا",
-        primaryAction: () async {
-          primaryAction();
-        },
-        secondaryAction: () {
-          secondaryAction ?? Navigator.pop(context);
-        });
-  }
-
   // Request Bluetooth permissions
   Future<void> requestPermissions() async {
-    // Request the necessary Bluetooth permissions
-    // var status = await Permission.bluetoothScan.request();
     if (await PermissionServiceHandler()
             .handleServicePermission(setting: Permission.bluetoothConnect) &&
-        await PermissionServiceHandler()
-            .handleServicePermission(setting: Permission.bluetoothScan)) {
-      // If granted, start scanning for devices
-      _getBluetoothDevices();
+        await PermissionServiceHandler().handleServicePermission(
+          setting: Permission.bluetoothScan,
+        )) {
+      if (mounted) {
+        _getBluetoothDevices();
+      }
     } else {
       _dialogMessage(
-          icon: ImagePaths.warning,
-          message: "ليس لديك صلاحيات للاتصال بالبلوتوث",
-          primaryAction: () async {
-            Navigator.pop(context);
-            openAppSettings().then((value) async {
+        icon: ImagePaths.warning,
+        message: "ليس لديك صلاحيات للاتصال بالبلوتوث",
+        primaryAction: () async {
+          Navigator.pop(context);
+          openAppSettings().then(
+            (value) async {
               if (await PermissionServiceHandler().handleServicePermission(
                       setting: Permission.bluetoothConnect) &&
                   await PermissionServiceHandler().handleServicePermission(
                       setting: Permission.bluetoothScan)) {}
-            });
-          });
-      print("ليس لديك صلاحيات للاتصال بالبلوتوث");
+            },
+          );
+        },
+      );
     }
   }
-
   // Get bonded Bluetooth devices
   void _getBluetoothDevices() async {
     devices = await FlutterBluetoothSerial.instance.getBondedDevices();
     setState(() {});
-  }
-
-  // Capture the screenshot and send to printer
-  void _captureAndPrint() async {
-    if (selectedDevice == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("من فضلك قم بتحديد الجهاز الذي تريد طباعة الفاتورة")));
-      return;
-    }
-    await bluetoothPrinter.connectToDevice(selectedDevice!, context);
-    await bluetoothPrinter.printImage(widget.imageBytes);
-    bluetoothPrinter.disconnect(context);
   }
 
   @override
@@ -186,7 +108,6 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              // Device selection
               const SizedBox(height: 10),
               const Text("اختر الجهاز الذي تريد الطباعة"),
               const SizedBox(height: 10),
@@ -223,10 +144,8 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
                       ),
               ),
               const SizedBox(height: 10),
-              // Image
               Image.memory(widget.imageBytes, width: 200, height: 200),
               const SizedBox(height: 10),
-              // Print button
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
@@ -254,24 +173,24 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
       final PosPrintResult res = await printerService.connect(ip, port: 9100);
       if (res == PosPrintResult.success) {
         log('connected');
-        final AnotherImage.Image fatoraImage =
-            AnotherImage.decodeImage(widget.imageBytes)!;
+        final anotherImage.Image fatoraImage =
+            anotherImage.decodeImage(widget.imageBytes)!;
         // // table header
         // Uint8List? tableHeaderAs8List = await createImageFromWidget(tableHeader(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
-        // final AnotherImage.Image tableHeaderImage = AnotherImage.decodeImage(tableHeaderAs8List!)!;
+        // final anotherImage.Image tableHeaderImage = anotherImage.decodeImage(tableHeaderAs8List!)!;
         // // divider
         // Uint8List? dividerAs8List = await createImageFromWidget(divider(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
-        // final AnotherImage.Image dividerImage = AnotherImage.decodeImage(dividerAs8List!)!;
+        // final anotherImage.Image dividerImage = anotherImage.decodeImage(dividerAs8List!)!;
         // // table item row
         // Uint8List? tableItemRowAs8List = await createImageFromWidget(tableItemRow(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
-        // final AnotherImage.Image tableItemRowImage = AnotherImage.decodeImage(tableItemRowAs8List!)!;
+        // final anotherImage.Image tableItemRowImage = anotherImage.decodeImage(tableItemRowAs8List!)!;
         // // table footer
         // Uint8List? tableFooterRowAs8List = await createImageFromWidget(tableFotter(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
-        // final AnotherImage.Image tableFooterImage = AnotherImage.decodeImage(tableFooterRowAs8List!)!;
+        // final anotherImage.Image tableFooterImage = anotherImage.decodeImage(tableFooterRowAs8List!)!;
         // // invoice ref & print time
         // Uint8List? invoiceRefAndPrintTimeAs8List =
         // await createImageFromWidget(referenceNoAndPrintTime(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
-        // final AnotherImage.Image invoiceRefAndPrintTimerImage = AnotherImage.decodeImage(invoiceRefAndPrintTimeAs8List!)!;
+        // final anotherImage.Image invoiceRefAndPrintTimerImage = anotherImage.decodeImage(invoiceRefAndPrintTimeAs8List!)!;
 
         printerService.image(fatoraImage);
         // printerService.image(tableHeaderImage);
@@ -292,5 +211,25 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
     } catch (e, stackTrace) {
       log(e.toString(), stackTrace: stackTrace);
     }
+  }
+
+  void _dialogMessage({
+    required String message,
+    required String icon,
+    required Function() primaryAction,
+    Function()? secondaryAction,
+  }) {
+    showActionDialogWidget(
+        context: context,
+        text: message,
+        icon: icon,
+        primaryText: "نعم",
+        secondaryText: "لا",
+        primaryAction: () async {
+          primaryAction();
+        },
+        secondaryAction: () {
+          secondaryAction ?? Navigator.pop(context);
+        });
   }
 }
