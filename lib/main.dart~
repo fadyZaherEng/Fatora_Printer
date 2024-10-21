@@ -19,6 +19,7 @@ Future<void> main() async {
 }
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

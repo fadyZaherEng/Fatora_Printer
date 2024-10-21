@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'dart:typed_data';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fatora/main.dart';
@@ -34,7 +33,7 @@ class PrintFatoraScreen extends BaseStatefulWidget {
 
 class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
   final GlobalKey _globalKeyForPrint = GlobalKey();
-
+  Uint8List? _imageBytes;
   final _fatoraNameController = TextEditingController();
 
   @override
@@ -72,7 +71,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                     Expanded(
                       child: CustomButtonWidget(
                         onTap: () {
-                          _connectWithBluetoothPrinter();
+                          _navigateToBluetoothPrinter();
                         },
                         buttonBorderRadius: 34,
                         text: "طباعة الفاتورة",
@@ -102,72 +101,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
       ),
     );
   }
-
-  Widget _buildItemNumber(label, value) {
-    return Text('$label: $value',
-        textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: ColorSchemes.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ));
-  }
-
-  Widget _buildArrowWidget() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(children: [
-            Container(
-              width: 10,
-              height: 3,
-              color: Colors.grey[300],
-            ),
-            const SizedBox(height: 3),
-            Container(
-              width: 10,
-              height: 3,
-              color: Colors.grey[300],
-            )
-          ]),
-          const SizedBox(width: 10),
-          for (int i = 0; i < 8; i++)
-            Row(
-              children: [
-                Column(children: [
-                  Container(
-                    width: 20,
-                    height: 3,
-                    color: Colors.grey[300],
-                  ),
-                  const SizedBox(height: 3),
-                  Container(
-                    width: 20,
-                    height: 3,
-                    color: Colors.grey[300],
-                  )
-                ]),
-                const SizedBox(width: 10),
-              ],
-            ),
-          const SizedBox(width: 10),
-          Column(
-            children: [
-              Container(
-                width: 10,
-                height: 3,
-                color: Colors.grey[300],
-              ),
-              const SizedBox(height: 3),
-              Container(
-                width: 10,
-                height: 3,
-                color: Colors.grey[300],
-              )
-            ],
-          ),
-        ],
-      );
-  Uint8List? _imageBytes;
 
   // Function to capture the widget as an image
   Future<void> _captureAndSaveImage() async {
@@ -215,7 +148,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
       } else {
         _dialogMessage(
             icon: ImagePaths.warning,
-            message: "Storage Permission Is Required To Proceed",
+            message: "الرجاء تفعيل صلاحية المستخدم للتطبيق",
             primaryAction: () async {
               Navigator.pop(context);
               openAppSettings().then((value) async {
@@ -225,27 +158,37 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
             });
       }
     } catch (e) {
-      print("Error capturing widget: $e");
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Error capturing image')));
+      print("يجد خطأ: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'فشل في تحميل الفاتورة',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
     }
   }
 
-  Future<Uint8List?> createImageFromWidget(Widget widget,
-      {Duration? wait, Size? logicalSize, Size? imageSize}) async {
+  Future<Uint8List?> _createImageFromWidget(
+    Widget widget, {
+    Duration? wait,
+    Size? logicalSize,
+    Size? imageSize,
+  }) async {
     var cxt = appNavigatorKey.currentState!.context;
-// Create a repaint boundary to capture the image
+    // Create a repaint boundary to capture the image
     final repaintBoundary = RenderRepaintBoundary();
 
-// Calculate logicalSize and imageSize if not provided
+    // Calculate logicalSize and imageSize if not provided
     logicalSize ??= View.of(cxt).physicalSize / View.of(cxt).devicePixelRatio;
     imageSize ??= View.of(cxt).physicalSize;
 
-// Ensure logicalSize and imageSize have the same aspect ratio
+    // Ensure logicalSize and imageSize have the same aspect ratio
     assert(logicalSize.aspectRatio == imageSize.aspectRatio,
         'logicalSize and imageSize must not be the same');
 
-// Create the render tree for capturing the widget as an image
+    // Create the render tree for capturing the widget as an image
     final renderView = RenderView(
       view: View.of(cxt),
       child: RenderPositionedBox(
@@ -262,7 +205,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     pipelineOwner.rootNode = renderView;
     renderView.prepareInitialFrame();
 
-// Attach the widget's render object to the render tree
+    // Attach the widget's render object to the render tree
     final rootElement = RenderObjectToWidgetAdapter<RenderBox>(
         container: repaintBoundary,
         child: Directionality(
@@ -272,58 +215,39 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
 
     buildOwner.buildScope(rootElement);
 
-// Delay if specified
+    // Delay if specified
     if (wait != null) {
       await Future.delayed(wait);
     }
 
-// Build and finalize the render tree
+    // Build and finalize the render tree
     buildOwner
       ..buildScope(rootElement)
       ..finalizeTree();
 
-// Flush layout, compositing, and painting operations
+    // Flush layout, compositing, and painting operations
     pipelineOwner
       ..flushLayout()
       ..flushCompositingBits()
       ..flushPaint();
 
-// Capture the image and convert it to byte data
+    // Capture the image and convert it to byte data
     final image = await repaintBoundary.toImage(
         pixelRatio: imageSize.width / logicalSize.width);
     final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
 
-// Return the image data as Uint8List
+    // Return the image data as Uint8List
     return byteData?.buffer.asUint8List();
   }
 
-  void _dialogMessage({
-    required String message,
-    required String icon,
-    required Function() primaryAction,
-    Function()? secondaryAction,
-  }) {
-    showActionDialogWidget(
-        context: context,
-        text: message,
-        icon: icon,
-        primaryText: "نعم",
-        secondaryText: "لا",
-        primaryAction: () async {
-          primaryAction();
-        },
-        secondaryAction: () {
-          secondaryAction ?? Navigator.pop(context);
-        });
-  }
-
-  void _connectWithBluetoothPrinter() async {
+  void _navigateToBluetoothPrinter() async {
     if (await PermissionServiceHandler().handleServicePermission(
-        setting: PermissionServiceHandler.getStorageFilesPermission(
-      androidDeviceInfo:
-          Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null,
-    ))) {
-      _imageBytes = await createImageFromWidget(
+      setting: PermissionServiceHandler.getStorageFilesPermission(
+        androidDeviceInfo:
+            Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null,
+      ),
+    )) {
+      _imageBytes = await _createImageFromWidget(
         _buildFatoraDetails(isPrint: true),
         logicalSize: const Size(800, 800),
         imageSize: const Size(950, 950),
@@ -367,8 +291,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                   ImagePaths.log,
                   width: 40,
                   height: 30,
-                  // color: Colors.black,
-                  // scale: 0.6,
                 ),
               ),
               const SizedBox(width: 10),
@@ -444,7 +366,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        isPrint ? divider() : _buildArrowWidget(), const SizedBox(height: 15),
+        isPrint ? divider() : _buildArrowWidget(),
+        const SizedBox(height: 15),
         Text(
           widget.fatora!.status,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -582,7 +505,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         const SizedBox(height: 10),
         isPrint ? divider() : _buildArrowWidget(),
         const SizedBox(height: 10),
-        //add some space
         Directionality(
           textDirection: TextDirection.rtl,
           child: SizedBox(
@@ -612,7 +534,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     );
   }
 
-  // divider
   Widget divider() {
     return const SizedBox(
       width: 420,
@@ -621,6 +542,94 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         thickness: 1.5,
         color: Colors.black,
       ),
+    );
+  }
+
+  Widget _buildItemNumber(label, value) {
+    return Text(
+      '$label: $value',
+      textAlign: TextAlign.start,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: ColorSchemes.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+    );
+  }
+
+  Widget _buildArrowWidget() => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(children: [
+            Container(
+              width: 10,
+              height: 3,
+              color: Colors.grey[300],
+            ),
+            const SizedBox(height: 3),
+            Container(
+              width: 10,
+              height: 3,
+              color: Colors.grey[300],
+            )
+          ]),
+          const SizedBox(width: 10),
+          for (int i = 0; i < 8; i++)
+            Row(
+              children: [
+                Column(children: [
+                  Container(
+                    width: 20,
+                    height: 3,
+                    color: Colors.grey[300],
+                  ),
+                  const SizedBox(height: 3),
+                  Container(
+                    width: 20,
+                    height: 3,
+                    color: Colors.grey[300],
+                  )
+                ]),
+                const SizedBox(width: 10),
+              ],
+            ),
+          const SizedBox(width: 10),
+          Column(
+            children: [
+              Container(
+                width: 10,
+                height: 3,
+                color: Colors.grey[300],
+              ),
+              const SizedBox(height: 3),
+              Container(
+                width: 10,
+                height: 3,
+                color: Colors.grey[300],
+              )
+            ],
+          ),
+        ],
+      );
+
+  void _dialogMessage({
+    required String message,
+    required String icon,
+    required Function() primaryAction,
+    Function()? secondaryAction,
+  }) {
+    showActionDialogWidget(
+      context: context,
+      text: message,
+      icon: icon,
+      primaryText: "نعم",
+      secondaryText: "لا",
+      primaryAction: () async {
+        primaryAction();
+      },
+      secondaryAction: () {
+        secondaryAction ?? Navigator.pop(context);
+      },
     );
   }
 }

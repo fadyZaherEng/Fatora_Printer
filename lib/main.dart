@@ -2,7 +2,6 @@ import 'package:fatora/generated/l10n.dart';
 import 'package:fatora/src/config/routes/routes_manager.dart';
 import 'package:fatora/src/di/injector.dart';
 import 'package:fatora/src/presentation/blocs/fatora/fatora_bloc.dart';
-import 'package:fatora/src/presentation/screens/bluetooth/widgets/priter_services.dart';
 import 'package:fatora/src/presentation/screens/main/screen/main_screen.dart';
 import 'package:fatora/src/presentation/widgets/restart_widget.dart';
 import 'package:flutter/material.dart';

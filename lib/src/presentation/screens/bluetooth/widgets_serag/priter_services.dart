@@ -1,11 +1,10 @@
 // ignore_for_file: library_prefixes
 
 import 'dart:developer';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:fatora/src/presentation/screens/bluetooth/widgets/printer_widgets.dart';
+import 'package:fatora/src/presentation/screens/bluetooth/widgets_serag/printer_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -35,24 +34,24 @@ printTest(String ip) async {
               orderNo(),
             ],
           ),
-          logicalSize: Size(500, 500),
-          imageSize: Size(680, 680));
+          logicalSize: const Size(500, 500),
+          imageSize: const Size(680, 680));
       final AnotherImage.Image companyNameImage = AnotherImage.decodeImage(companyNameAs8List!)!;
       // table header
-      Uint8List? tableHeaderAs8List = await createImageFromWidget(tableHeader(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+      Uint8List? tableHeaderAs8List = await createImageFromWidget(tableHeader(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
       final AnotherImage.Image tableHeaderImage = AnotherImage.decodeImage(tableHeaderAs8List!)!;
       // divider
-      Uint8List? dividerAs8List = await createImageFromWidget(divider(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+      Uint8List? dividerAs8List = await createImageFromWidget(divider(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
       final AnotherImage.Image dividerImage = AnotherImage.decodeImage(dividerAs8List!)!;
       // table item row
-      Uint8List? tableItemRowAs8List = await createImageFromWidget(tableItemRow(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+      Uint8List? tableItemRowAs8List = await createImageFromWidget(tableItemRow(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
       final AnotherImage.Image tableItemRowImage = AnotherImage.decodeImage(tableItemRowAs8List!)!;
       // table footer
-      Uint8List? tableFooterRowAs8List = await createImageFromWidget(tableFotter(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+      Uint8List? tableFooterRowAs8List = await createImageFromWidget(tableFotter(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
       final AnotherImage.Image tableFooterImage = AnotherImage.decodeImage(tableFooterRowAs8List!)!;
       // invoice ref & print time
       Uint8List? invoiceRefAndPrintTimeAs8List =
-          await createImageFromWidget(referenceNoAndPrintTime(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+          await createImageFromWidget(referenceNoAndPrintTime(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
       final AnotherImage.Image invoiceRefAndPrintTimerImage = AnotherImage.decodeImage(invoiceRefAndPrintTimeAs8List!)!;
 
       printerService.image(companyNameImage);

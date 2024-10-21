@@ -11,41 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as anotherImage;
 import 'package:permission_handler/permission_handler.dart';
 
-class BluetoothPrinter {
-  BluetoothConnection? connection;
-
-  // Scan and connect to a Bluetooth device
-  Future<void> connectToDevice(
-      BluetoothDevice device, BuildContext context) async {
-    try {
-      connection = await BluetoothConnection.toAddress(device.address);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم الاتصال بنجاح'),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${e.toString()} فشل في الاتصال'),
-        ),
-      );
-    }
-  }
-
-  // Disconnect Bluetooth connection
-  void disconnect(context) {
-    if (connection != null) {
-      connection!.finish();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم الغاء الاتصال بنجاح'),
-        ),
-      );
-    }
-  }
-}
-
 class PrintScreenApp extends StatefulWidget {
   final Uint8List imageBytes;
 
@@ -94,77 +59,110 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
       );
     }
   }
+
   // Get bonded Bluetooth devices
   void _getBluetoothDevices() async {
-    devices = await FlutterBluetoothSerial.instance.getBondedDevices();
-    setState(() {});
+    if (mounted) {
+      devices = await FlutterBluetoothSerial.instance.getBondedDevices();
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              const Text("اختر الجهاز الذي تريد الطباعة"),
-              const SizedBox(height: 10),
-              Icon(
-                Icons.bluetooth,
-                size: 60,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: devices.isEmpty
-                    ? const Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        itemCount: devices.length,
-                        itemBuilder: (context, index) {
-                          BluetoothDevice device = devices[index];
-                          return ListTile(
-                            title: Text(device.name ?? "Unknown Device"),
-                            subtitle: Text(device.address),
-                            trailing: selectedDevice == device
-                                ? const Icon(Icons.check, color: Colors.green)
-                                : null,
-                            onTap: () {
-                              selectedDevice = device;
-                              if (mounted) {
-                                setState(() async {
-                                  await bluetoothPrinter.connectToDevice(
-                                      selectedDevice!, context);
-                                });
-                              }
-                            },
-                          );
-                        },
+      body: RefreshIndicator(
+        onRefresh: () async => _getBluetoothDevices(),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+                const Text("اختر الجهاز الذي تريد الطباعة"),
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 3,
+                        ),
                       ),
-              ),
-              const SizedBox(height: 10),
-              // Image
-              Image.memory(widget.imageBytes, width: 200, height: 200),
-              const SizedBox(height: 10),
-              // Print button
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    printTest();
-                  },
-                  child: const Text("طباعة الفاتورة"),
+                      padding: const EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.bluetooth,
+                        size: 25,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      icon: Icon(
+                        Icons.refresh,
+                        size: 30,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onPressed: () => _getBluetoothDevices(),
+                    )
+                  ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 15),
+                devices.isEmpty
+                    ? const Expanded(
+                        child: Center(
+                          child: Text(
+                            "لا يوجد أجهزة بلوتوث",
+                          ),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: devices.length,
+                          itemBuilder: (context, index) {
+                            BluetoothDevice device = devices[index];
+                            return ListTile(
+                              title: Text(device.name ?? "Unknown Device"),
+                              subtitle: Text(device.address),
+                              trailing: selectedDevice == device
+                                  ? const Icon(Icons.check, color: Colors.green)
+                                  : null,
+                              onTap: () {
+                                selectedDevice = device;
+                                if (mounted) {
+                                  setState(() async {
+                                    await bluetoothPrinter.connectToDevice(
+                                        selectedDevice!, context);
+                                  });
+                                }
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                const SizedBox(height: 10),
+                Image.memory(widget.imageBytes, width: 400, height: 200),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _sendFatoraToPrinter();
+                    },
+                    child: const Text("طباعة الفاتورة"),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void printTest() async {
+  void _sendFatoraToPrinter() async {
     log('printTest');
     try {
       String ip = selectedDevice!.address;
@@ -177,6 +175,7 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
         log('connected');
         final anotherImage.Image fatoraImage =
             anotherImage.decodeImage(widget.imageBytes)!;
+        printerService.image(fatoraImage);
         // // table header
         // Uint8List? tableHeaderAs8List = await createImageFromWidget(tableHeader(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
         // final anotherImage.Image tableHeaderImage = anotherImage.decodeImage(tableHeaderAs8List!)!;
@@ -193,8 +192,6 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
         // Uint8List? invoiceRefAndPrintTimeAs8List =
         // await createImageFromWidget(referenceNoAndPrintTime(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
         // final anotherImage.Image invoiceRefAndPrintTimerImage = anotherImage.decodeImage(invoiceRefAndPrintTimeAs8List!)!;
-
-        printerService.image(fatoraImage);
         // printerService.image(tableHeaderImage);
         // printerService.image(dividerImage);
         // printerService.image(tableItemRowImage);
@@ -202,7 +199,7 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
         // printerService.image(tableItemRowImage);
         // printerService.image(dividerImage);
         // printerService.image(tableFooterImage);
-        printerService.emptyLines(3);
+        printerService.emptyLines(2);
         // printerService.image(invoiceRefAndPrintTimerImage);
         printerService.feed(1);
         printerService.cut();
@@ -222,16 +219,51 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
     Function()? secondaryAction,
   }) {
     showActionDialogWidget(
-        context: context,
-        text: message,
-        icon: icon,
-        primaryText: "نعم",
-        secondaryText: "لا",
-        primaryAction: () async {
-          primaryAction();
-        },
-        secondaryAction: () {
-          secondaryAction ?? Navigator.pop(context);
-        });
+      context: context,
+      text: message,
+      icon: icon,
+      primaryText: "نعم",
+      secondaryText: "لا",
+      primaryAction: () async {
+        primaryAction();
+      },
+      secondaryAction: () {
+        secondaryAction ?? Navigator.pop(context);
+      },
+    );
+  }
+}
+
+//Connection to a Bluetooth device
+class BluetoothPrinter {
+  BluetoothConnection? connection;
+
+  Future<void> connectToDevice(
+      BluetoothDevice device, BuildContext context) async {
+    try {
+      connection = await BluetoothConnection.toAddress(device.address);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تم الاتصال بنجاح'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${e.toString()} فشل في الاتصال'),
+        ),
+      );
+    }
+  }
+
+  void disconnect(context) {
+    if (connection != null) {
+      connection!.finish();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تم الغاء الاتصال بنجاح'),
+        ),
+      );
+    }
   }
 }
