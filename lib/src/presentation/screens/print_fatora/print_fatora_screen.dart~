@@ -235,8 +235,12 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     }
   }
 
-  Future<Uint8List?> createImageFromWidget(Widget widget,
-      {Duration? wait, Size? logicalSize, Size? imageSize}) async {
+  Future<Uint8List?> _createImageFromWidget(
+    Widget widget, {
+    Duration? wait,
+    Size? logicalSize,
+    Size? imageSize,
+  }) async {
     var cxt = appNavigatorKey.currentState!.context;
     // Create a repaint boundary to capture the image
     final repaintBoundary = RenderRepaintBoundary();
@@ -322,7 +326,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
       androidDeviceInfo:
           Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null,
     ))) {
-      _imageBytes = await createImageFromWidget(
+      _imageBytes = await _createImageFromWidget(
         _buildFatoraDetails(isPrint: true),
         logicalSize: const Size(800, 800),
         imageSize: const Size(930, 930),
@@ -333,7 +337,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         message: "الرجاء تفعيل صلاحية المستخدم للتطبيق",
         primaryAction: () async {
           Navigator.pop(context);
-          openAppSettings().then((value) async {
+          openAppSettings().then(
+            (value) async {
               if (await PermissionServiceHandler().handleServicePermission(
                 setting: Permission.storage,
               )) {}
@@ -354,7 +359,9 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     }
   }
 
-  Widget _buildFatoraDetails({bool isPrint = false}) {
+  Widget _buildFatoraDetails({
+    bool isPrint = false,
+  }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

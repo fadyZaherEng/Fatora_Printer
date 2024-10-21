@@ -235,8 +235,12 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     }
   }
 
-  Future<Uint8List?> createImageFromWidget(Widget widget,
-      {Duration? wait, Size? logicalSize, Size? imageSize}) async {
+  Future<Uint8List?> _createImageFromWidget(
+    Widget widget, {
+    Duration? wait,
+    Size? logicalSize,
+    Size? imageSize,
+  }) async {
     var cxt = appNavigatorKey.currentState!.context;
     // Create a repaint boundary to capture the image
     final repaintBoundary = RenderRepaintBoundary();
@@ -318,11 +322,12 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
 
   void _connectWithBluetoothPrinter() async {
     if (await PermissionServiceHandler().handleServicePermission(
-        setting: PermissionServiceHandler.getStorageFilesPermission(
-      androidDeviceInfo:
-          Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null,
-    ))) {
-      _imageBytes = await createImageFromWidget(
+      setting: PermissionServiceHandler.getStorageFilesPermission(
+        androidDeviceInfo:
+            Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null,
+      ),
+    )) {
+      _imageBytes = await _createImageFromWidget(
         _buildFatoraDetails(isPrint: true),
         logicalSize: const Size(800, 800),
         imageSize: const Size(930, 930),
