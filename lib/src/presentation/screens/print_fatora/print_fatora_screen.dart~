@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'dart:typed_data';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fatora/main.dart';
@@ -586,23 +585,26 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         isPrint ? divider() : _buildArrowWidget(),
         const SizedBox(height: 10),
         //add some space
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildItemNumber("رقم الايصال", widget.fatora!.numberArrived),
-                const SizedBox(height: 10),
-                _buildItemNumber("رقم الحركة", widget.fatora!.numberMove),
-                const SizedBox(height: 10),
-                _buildItemNumber("رقم الجهاز", widget.fatora!.deviceNumber),
-                const SizedBox(height: 10),
-                _buildItemNumber("رقم التاجر", widget.fatora!.traderNumber),
-                const SizedBox(height: 10),
-              ],
+        Directionality(
+          textDirection: TextDirection.rtl,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildItemNumber("رقم الايصال", widget.fatora!.numberArrived),
+                  const SizedBox(height: 10),
+                  _buildItemNumber("رقم الحركة", widget.fatora!.numberMove),
+                  const SizedBox(height: 10),
+                  _buildItemNumber("رقم الجهاز", widget.fatora!.deviceNumber),
+                  const SizedBox(height: 10),
+                  _buildItemNumber("رقم التاجر", widget.fatora!.traderNumber),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
           ),
         ),

@@ -333,7 +333,8 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         message: "الرجاء تفعيل صلاحية المستخدم للتطبيق",
         primaryAction: () async {
           Navigator.pop(context);
-          openAppSettings().then((value) async {
+          openAppSettings().then(
+            (value) async {
               if (await PermissionServiceHandler().handleServicePermission(
                 setting: Permission.storage,
               )) {}
@@ -354,7 +355,9 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
     }
   }
 
-  Widget _buildFatoraDetails({bool isPrint = false}) {
+  Widget _buildFatoraDetails({
+    bool isPrint = false,
+  }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
