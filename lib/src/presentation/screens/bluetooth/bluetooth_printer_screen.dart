@@ -1,22 +1,16 @@
 import 'dart:developer';
 import 'dart:typed_data';
-
 import 'package:fatora/src/core/resources/image_paths.dart';
 import 'package:fatora/src/core/utils/permission_service_handler.dart';
 import 'package:fatora/src/core/utils/show_action_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'dart:ui' as ui;
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:fatora/src/presentation/screens/bluetooth/widgets/printer_widgets.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as AnotherImage;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:screenshot/screenshot.dart';
-
 
 class BluetoothPrinter {
   BluetoothConnection? connection;
@@ -74,7 +68,8 @@ class BluetoothPrinter {
     final generator = Generator(PaperSize.mm80, profile);
 
     // Decode the image using the 'image' package (convert Uint8List to a usable format)
-    final image = img.decodeImage(imageData); // Assuming you are using the 'image' package for decoding
+    final image = img.decodeImage(
+        imageData); // Assuming you are using the 'image' package for decoding
 
     if (image == null) {
       print('Failed to decode image');
@@ -85,7 +80,6 @@ class BluetoothPrinter {
     final List<int> ticket = generator.image(image);
 
     try {
-
       // Send the image data (ESC/POS formatted commands) to the printer
       connection?.output.add(Uint8List.fromList(ticket));
       await connection?.output.allSent;
@@ -112,7 +106,6 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
   BluetoothPrinter bluetoothPrinter = BluetoothPrinter();
   List<BluetoothDevice> devices = [];
   BluetoothDevice? selectedDevice;
-
 
   @override
   void didChangeDependencies() async {
@@ -182,7 +175,7 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
     }
     await bluetoothPrinter.connectToDevice(selectedDevice!, context);
     await bluetoothPrinter.printImage(widget.imageBytes);
-      bluetoothPrinter.disconnect(context);
+    bluetoothPrinter.disconnect(context);
   }
 
   @override
@@ -216,11 +209,14 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
                             trailing: selectedDevice == device
                                 ? const Icon(Icons.check, color: Colors.green)
                                 : null,
-                            onTap: () async {
-                                selectedDevice = device;
-                              setState(() {
-
-                              });
+                            onTap: () {
+                              selectedDevice = device;
+                              if (mounted) {
+                                setState(() async {
+                                  await bluetoothPrinter.connectToDevice(
+                                      selectedDevice!, context);
+                                });
+                              }
                             },
                           );
                         },
@@ -228,14 +224,14 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
               ),
               const SizedBox(height: 10),
               // Image
-              // Image.memory(widget.imageBytes, width: 200, height: 200),
+              Image.memory(widget.imageBytes, width: 200, height: 200),
               const SizedBox(height: 10),
               // Print button
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
-                  onPressed: (){
-                     printTest();
+                  onPressed: () {
+                    printTest();
                   },
                   child: const Text("طباعة الفاتورة"),
                 ),
@@ -246,10 +242,11 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
       ),
     );
   }
- void printTest()  async{
+
+  void printTest() async {
     log('printTest');
     try {
-      String ip=selectedDevice!.address;
+      String ip = selectedDevice!.address;
       const PaperSize paper = PaperSize.mm80;
       final profile = await CapabilityProfile.load();
       final printerService = NetworkPrinter(paper, profile);
@@ -257,7 +254,8 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
       final PosPrintResult res = await printerService.connect(ip, port: 9100);
       if (res == PosPrintResult.success) {
         log('connected');
-        final AnotherImage.Image fatoraImage = AnotherImage.decodeImage(widget.imageBytes)!;
+        final AnotherImage.Image fatoraImage =
+            AnotherImage.decodeImage(widget.imageBytes)!;
         // // table header
         // Uint8List? tableHeaderAs8List = await createImageFromWidget(tableHeader(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
         // final AnotherImage.Image tableHeaderImage = AnotherImage.decodeImage(tableHeaderAs8List!)!;
@@ -295,5 +293,4 @@ class _PrintScreenAppState extends State<PrintScreenApp> {
       log(e.toString(), stackTrace: stackTrace);
     }
   }
-
 }

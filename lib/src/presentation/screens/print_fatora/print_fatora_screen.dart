@@ -200,15 +200,20 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
             quality: 100);
         print(result); // Prints the saved path in the gallery
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
             backgroundColor: ColorSchemes.white,
-            content: Text('تم تحميل الفاتورة بنجاح الى المعرض',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: ColorSchemes.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ))));
+            content: Text(
+              'تم تحميل الفاتورة بنجاح الى المعرض',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: ColorSchemes.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+            ),
+          ),
+        );
       } else {
         _dialogMessage(
             icon: ImagePaths.warning,
@@ -351,32 +356,41 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
 
   Widget _buildFatoraDetails({bool isPrint = false}) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 15),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              ImagePaths.log,
-              width: 40,
-              height: 30,
-            ),
-            const SizedBox(width: 10),
-            SvgPicture.asset(
-              ImagePaths.visa,
-              width: 40,
-              height: 35,
-            ),
-            const SizedBox(width: 10),
-            SvgPicture.asset(
-              ImagePaths.master,
-              width: 40,
-              height: 35,
-            ),
-          ],
+        SizedBox(
+          width: 150,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: SvgPicture.asset(
+                  ImagePaths.log,
+                  width: 40,
+                  height: 30,
+                  // color: Colors.black,
+                  // scale: 0.6,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Flexible(
+                child: SvgPicture.asset(
+                  ImagePaths.visa,
+                  width: 40,
+                  height: 35,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Flexible(
+                child: SvgPicture.asset(
+                  ImagePaths.master,
+                  width: 40,
+                  height: 35,
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 15),
         Text(
@@ -406,11 +420,12 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
               ),
         ),
         const SizedBox(height: 10),
-        _buildArrowWidget(),
+        isPrint ? divider() : _buildArrowWidget(),
         const SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+        SizedBox(
+          width: 420,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(widget.fatora!.date.split(" ")[0],
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -418,7 +433,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
                       )),
-              const Spacer(),
+              const Flexible(child: SizedBox()),
               Text(
                 widget.fatora!.time.split(" ")[0],
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -431,8 +446,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        _buildArrowWidget(),
-        const SizedBox(height: 15),
+        isPrint ? divider() : _buildArrowWidget(), const SizedBox(height: 15),
         Text(
           widget.fatora!.status,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -514,7 +528,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
         ),
         const SizedBox(height: 10),
         Directionality(
-          textDirection: TextDirection.ltr,
+          textDirection: TextDirection.rtl,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -536,8 +550,9 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
               ),
               Text(
                 widget.fatora!.fatoraSenderId.substring(
-                    widget.fatora!.fatoraSenderId.length - 4,
-                    widget.fatora!.fatoraSenderId.length),
+                  widget.fatora!.fatoraSenderId.length - 4,
+                  widget.fatora!.fatoraSenderId.length,
+                ),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: ColorSchemes.black,
                       fontSize: 16,
@@ -567,14 +582,16 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                 },
               ),
         const SizedBox(height: 10),
-        _buildArrowWidget(),
+        isPrint ? divider() : _buildArrowWidget(),
         const SizedBox(height: 10),
         //add some space
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Column(
+        Directionality(
+          textDirection: TextDirection.rtl,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -586,12 +603,26 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                   const SizedBox(height: 10),
                   _buildItemNumber("رقم التاجر", widget.fatora!.traderNumber),
                   const SizedBox(height: 10),
-                ]),
+                ],
+              ),
+            ),
           ),
         ),
-        _buildArrowWidget(),
+        isPrint ? divider() : _buildArrowWidget(),
         const SizedBox(height: 10),
       ],
+    );
+  }
+
+  // divider
+  Widget divider() {
+    return const SizedBox(
+      width: 420,
+      height: 10,
+      child: Divider(
+        thickness: 1.5,
+        color: Colors.black,
+      ),
     );
   }
 }
