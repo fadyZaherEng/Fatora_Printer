@@ -154,13 +154,7 @@ class _PrintScreenAppState extends BaseState<PrintScreenApp> {
       if (await PermissionServiceHandler()
           .handleServicePermission(setting: Permission.bluetoothConnect)) {
         if (await PermissionServiceHandler()
-            .handleServicePermission(setting: Permission.bluetoothScan)&&
-            await PermissionServiceHandler()
-                .handleServicePermission(setting: Permission.location)&&
-            await PermissionServiceHandler()
-                .handleServicePermission(setting: Permission.locationAlways)&&
-            await PermissionServiceHandler()
-                .handleServicePermission(setting: Permission.locationWhenInUse)) {
+            .handleServicePermission(setting: Permission.bluetoothScan)) {
           if (mounted) {
             devices = await FlutterBluetoothSerial.instance.getBondedDevices();
             setState(() {});

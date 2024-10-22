@@ -72,7 +72,7 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
                     Expanded(
                       child: CustomButtonWidget(
                         onTap: () {
-                          requestPermissions();
+                          _connectWithBluetoothPrinter();
                         },
                         buttonBorderRadius: 34,
                         text: "طباعة الفاتورة",
@@ -267,80 +267,6 @@ class _PrintFatoraScreenState extends BaseState<PrintFatoraScreen> {
               imageBytes: _imageBytes ?? Uint8List(0),
             ),
           ),
-        );
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // Request Bluetooth permissions
-  Future<void> requestPermissions() async {
-    try {
-      if (await PermissionServiceHandler()
-          .handleServicePermission(setting: Permission.bluetoothConnect)) {
-        if (await PermissionServiceHandler()
-            .handleServicePermission(setting: Permission.bluetoothScan)) {
-          if (await PermissionServiceHandler().handleServicePermission(
-              setting: Permission.accessMediaLocation)) {
-            _connectWithBluetoothPrinter();
-          } else {
-            _dialogMessage(
-              icon: ImagePaths.warning,
-              message: "ليس لديك صلاحيات للاتصال بالبلوتوث",
-              primaryAction: () async {
-                Navigator.pop(context);
-                openAppSettings().then(
-                  (value) async {
-                    if (await PermissionServiceHandler()
-                            .handleServicePermission(
-                                setting: Permission.bluetoothConnect) &&
-                        await PermissionServiceHandler()
-                            .handleServicePermission(
-                          setting: Permission.bluetoothScan,
-                        ) &&
-                        await PermissionServiceHandler()
-                            .handleServicePermission(
-                                setting: Permission.accessMediaLocation)) {}
-                  },
-                );
-              },
-            );
-          }
-        } else {
-          _dialogMessage(
-            icon: ImagePaths.warning,
-            message: "ليس لديك صلاحيات للاتصال بالبلوتوث",
-            primaryAction: () async {
-              Navigator.pop(context);
-              openAppSettings().then(
-                (value) async {
-                  if (await PermissionServiceHandler().handleServicePermission(
-                          setting: Permission.bluetoothConnect) &&
-                      await PermissionServiceHandler().handleServicePermission(
-                        setting: Permission.bluetoothScan,
-                      )) {}
-                },
-              );
-            },
-          );
-        }
-      } else {
-        _dialogMessage(
-          icon: ImagePaths.warning,
-          message: "ليس لديك صلاحيات للاتصال بالبلوتوث",
-          primaryAction: () async {
-            Navigator.pop(context);
-            openAppSettings().then(
-              (value) async {
-                if (await PermissionServiceHandler().handleServicePermission(
-                        setting: Permission.bluetoothConnect) &&
-                    await PermissionServiceHandler().handleServicePermission(
-                      setting: Permission.bluetoothScan,
-                    )) {}
-              },
-            );
-          },
         );
       }
     } catch (e) {
