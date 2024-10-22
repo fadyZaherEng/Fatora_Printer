@@ -148,48 +148,30 @@ class _PrintScreenAppState extends BaseState<PrintScreenApp> {
     await bluetoothPrinter.printImage(widget.imageBytes, context);
     bluetoothPrinter.disconnect(context);
   }
+
   // Request Bluetooth permissions
   Future<void> requestPermissions() async {
     try {
       if (await PermissionServiceHandler()
-          .handleServicePermission(setting: Permission.bluetoothConnect)) {
-        if (await PermissionServiceHandler()
-            .handleServicePermission(setting: Permission.bluetoothScan)&&
-            await PermissionServiceHandler()
-                .handleServicePermission(setting: Permission.location)&&
-            await PermissionServiceHandler()
-                .handleServicePermission(setting: Permission.locationAlways)&&
-            await PermissionServiceHandler()
-                .handleServicePermission(setting: Permission.locationWhenInUse)) {
-          if (mounted) {
-            devices = await FlutterBluetoothSerial.instance.getBondedDevices();
-            setState(() {});
-          }
-        } else {
-          _dialogMessage(
-            icon: ImagePaths.warning,
-            message: "ليس لديك صلاحيات للاتصال بالبلوتوث",
-            primaryAction: () async {
-              Navigator.pop(context);
-              openAppSettings().then(
-                    (value) async {
-                  if (await PermissionServiceHandler().handleServicePermission(
-                      setting: Permission.bluetoothConnect) ) {}
-                },
-              );
-            },
-          );
+              .handleServicePermission(setting: Permission.bluetoothConnect) &&
+          await PermissionServiceHandler()
+              .handleServicePermission(setting: Permission.bluetoothScan) &&
+          await PermissionServiceHandler()
+              .handleServicePermission(setting: Permission.locationWhenInUse)) {
+        if (mounted) {
+          devices = await FlutterBluetoothSerial.instance.getBondedDevices();
+          setState(() {});
         }
       } else {
         _dialogMessage(
           icon: ImagePaths.warning,
-          message: "ليس لديك صلاحيات للاتصال بالبلوتوث",
+          message: "يجب عليك السماح للاتصال بالبلوتوث",
           primaryAction: () async {
             Navigator.pop(context);
             openAppSettings().then(
-                  (value) async {
+              (value) async {
                 if (await PermissionServiceHandler().handleServicePermission(
-                    setting: Permission.bluetoothConnect) &&
+                        setting: Permission.bluetoothConnect) &&
                     await PermissionServiceHandler().handleServicePermission(
                       setting: Permission.bluetoothScan,
                     )) {}
@@ -202,6 +184,7 @@ class _PrintScreenAppState extends BaseState<PrintScreenApp> {
       print(e);
     }
   }
+
   void _dialogMessage({
     required String message,
     required String icon,
@@ -223,4 +206,3 @@ class _PrintScreenAppState extends BaseState<PrintScreenApp> {
     );
   }
 }
-

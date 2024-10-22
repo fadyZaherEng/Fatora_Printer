@@ -135,8 +135,6 @@ class _AddFatoraScreenState extends BaseState<AddFatoraScreen> {
                 pickDate: (_, DateTime dateTime) {},
                 selectTime: (TimeOfDay time) {
                   String timeText = time.format(context);
-                  timeText = timeText.replaceFirst("م","PM");
-                  timeText = timeText.replaceFirst("ص","AM");
                   _fatoraTimeController.text = timeText;
                 },
                 deleteDate: () {
