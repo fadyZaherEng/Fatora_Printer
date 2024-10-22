@@ -1,14 +1,9 @@
 import 'dart:typed_data';
 import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
-import 'package:fatora/src/core/resources/image_paths.dart';
-import 'package:fatora/src/core/utils/permission_service_handler.dart';
-import 'package:fatora/src/core/utils/show_action_dialog_widget.dart';
+import 'package:fatora/src/presentation/screens/bluetooth/utils/bluetooth_printer_service.dart';
 import 'package:flutter/material.dart';
-import 'package:image/image.dart' as img;
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
 
 class PrintScreenApp extends BaseStatefulWidget {
   final Uint8List imageBytes;
@@ -29,7 +24,7 @@ class _PrintScreenAppState extends BaseState<PrintScreenApp> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
     if (mounted) {
-      await requestPermissions();
+      _getBluetoothDevices();
     }
   }
 
@@ -103,9 +98,10 @@ class _PrintScreenAppState extends BaseState<PrintScreenApp> {
                                 onTap: () async {
                                   showLoading();
                                   selectedDevice = device;
-                                  await bluetoothPrinter.connectToDevice(selectedDevice!, context);
+                                  await bluetoothPrinter.connectToDevice(
+                                      selectedDevice!, context);
                                   hideLoading();
-                                  if(mounted) {
+                                  if (mounted) {
                                     setState(() {});
                                   }
                                 },
@@ -132,33 +128,6 @@ class _PrintScreenAppState extends BaseState<PrintScreenApp> {
     );
   }
 
-  // Request Bluetooth permissions
-  Future<void> requestPermissions() async {
-    if (await PermissionServiceHandler()
-            .handleServicePermission(setting: Permission.bluetoothConnect) &&
-        await PermissionServiceHandler()
-            .handleServicePermission(setting: Permission.bluetoothScan)) {
-      _getBluetoothDevices();
-    } else {
-      _dialogMessage(
-        icon: ImagePaths.warning,
-        message: "ليس لديك صلاحيات للاتصال بالبلوتوث",
-        primaryAction: () async {
-          Navigator.pop(context);
-          openAppSettings().then(
-            (value) async {
-              if (await PermissionServiceHandler().handleServicePermission(
-                      setting: Permission.bluetoothConnect) &&
-                  await PermissionServiceHandler().handleServicePermission(
-                    setting: Permission.bluetoothScan,
-                  )) {}
-            },
-          );
-        },
-      );
-    }
-  }
-
   void _getBluetoothDevices() async {
     if (mounted) {
       devices = await FlutterBluetoothSerial.instance.getBondedDevices();
@@ -181,98 +150,5 @@ class _PrintScreenAppState extends BaseState<PrintScreenApp> {
     await bluetoothPrinter.printImage(widget.imageBytes, context);
     bluetoothPrinter.disconnect(context);
   }
-
-  void _dialogMessage({
-    required String message,
-    required String icon,
-    required Function() primaryAction,
-    Function()? secondaryAction,
-  }) {
-    showActionDialogWidget(
-      context: context,
-      text: message,
-      icon: icon,
-      primaryText: "نعم",
-      secondaryText: "لا",
-      primaryAction: () async {
-        primaryAction();
-      },
-      secondaryAction: () {
-        secondaryAction ?? Navigator.pop(context);
-      },
-    );
-  }
 }
 
-class BluetoothPrinter {
-  BluetoothConnection? connection;
-
-  Future<void> connectToDevice(
-      BluetoothDevice device, BuildContext context) async {
-    try {
-      connection = await BluetoothConnection.toAddress(device.address);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم الاتصال بنجاح'),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('فشل في الاتصال'),
-        ),
-      );
-    }
-  }
-
-  // Disconnect Bluetooth connection
-  void disconnect(context) {
-    if (connection != null) {
-      connection!.finish();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم الغاء الاتصال بنجاح'),
-        ),
-      );
-    }
-  }
-
-  Future<void> printImage(Uint8List imageData, BuildContext context) async {
-    // Load a profile for the printer (ESC/POS printers often use a default profile)
-    final profile = await CapabilityProfile.load();
-
-    // Create an ESC/POS generator with the appropriate paper size (adjust size as needed)
-    final generator = Generator(PaperSize.mm80, profile);
-
-    // Decode the image using the 'image' package (convert Uint8List to a usable format)
-    final image = img.decodeImage(
-        imageData); // Assuming you are using the 'image' package for decoding
-
-    if (image == null) {
-      print('Failed to decode image');
-      return;
-    }
-
-    // Convert the image to ESC/POS commands using the generator
-    final List<int> ticket = generator.image(image);
-
-    try {
-      // Send the image data (ESC/POS formatted commands) to the printer
-      connection?.output.add(Uint8List.fromList(ticket));
-      await connection?.output.allSent;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم الطباعة بنجاح'),
-        ),
-      );
-      // Close the connection
-      connection?.finish();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('فشل في الطباعة'),
-        ),
-      );
-    }
-  }
-}
