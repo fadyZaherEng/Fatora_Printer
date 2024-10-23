@@ -52,10 +52,13 @@ class _PrintFatoraScreenState extends BaseState<DrawFatoraScreen> {
               children: [
                 RepaintBoundary(
                   key: _globalKeyForPrint,
-                  child: FatoraDetailsWidget(
-                    isPrint: false,
-                    fatora: widget.fatora ?? const Fatora(),
-                    fatoraNameController: _fatoraNameController,
+                  child: Container(
+                    color: ColorSchemes.white,
+                    child: FatoraDetailsWidget(
+                      isPrint: false,
+                      fatora: widget.fatora ?? const Fatora(),
+                      fatoraNameController: _fatoraNameController,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
