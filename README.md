@@ -20,3 +20,5 @@ Fatora App
 
 ### This For Ios and Android #esc_pos_printer with ip Address
 
+### Another way as orders app for ios and android #Printing with screenShot For screen
+
