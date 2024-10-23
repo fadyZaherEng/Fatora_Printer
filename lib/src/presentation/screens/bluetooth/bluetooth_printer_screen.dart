@@ -7,19 +7,17 @@ import 'package:fatora/src/presentation/screens/bluetooth/utils/bluetooth_printe
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:screenshot/screenshot.dart';
 
-class PrintScreenApp extends BaseStatefulWidget {
+class PrintScreen extends BaseStatefulWidget {
   final Uint8List imageBytes;
 
-  const PrintScreenApp({super.key, required this.imageBytes});
+  const PrintScreen({super.key, required this.imageBytes});
 
   @override
   _PrintScreenAppState baseCreateState() => _PrintScreenAppState();
 }
 
-class _PrintScreenAppState extends BaseState<PrintScreenApp> {
-  ScreenshotController screenshotController = ScreenshotController();
+class _PrintScreenAppState extends BaseState<PrintScreen> {
   BluetoothPrinter bluetoothPrinter = BluetoothPrinter();
   List<BluetoothDevice> devices = [];
   BluetoothDevice? selectedDevice;

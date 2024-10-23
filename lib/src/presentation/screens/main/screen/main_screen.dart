@@ -4,8 +4,8 @@ import 'package:fatora/src/config/routes/routes_manager.dart';
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/base/widget/base_stateful_widget.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
+import 'package:fatora/src/presentation/screens/draw_fatora/draw_fatora_screen.dart';
 import 'package:fatora/src/presentation/screens/history/history_screen.dart';
-import 'package:fatora/src/presentation/screens/print_fatora/print_fatora_screen.dart';
 
 // ignore: unnecessary_import
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class _MainScreenState extends BaseState<MainScreen>
   Fatora? _fatora ;
   List<Widget> _pages = [
     const HistoryScreen(),
-    const PrintFatoraScreen(fatora: Fatora()),
+    const DrawFatoraScreen(fatora: Fatora()),
   ];
 
   @override
@@ -41,7 +41,7 @@ class _MainScreenState extends BaseState<MainScreen>
     _fatora = widget.fatora;
     _pages = [
       const HistoryScreen(),
-      PrintFatoraScreen(fatora: _fatora),
+      DrawFatoraScreen(fatora: _fatora),
     ];
   }
 
@@ -113,13 +113,17 @@ class _MainScreenState extends BaseState<MainScreen>
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        tooltip: "اضافة فاتورة",
+        focusColor: ColorSchemes.white,
+        hoverColor: ColorSchemes.white,
+        isExtended: false,
         onPressed: () {
           Navigator.pushNamed(context, Routes.addFatora).then((value) {
             if (value != null) {
               _fatora = value as Fatora;
               _pages = [
                 const HistoryScreen(),
-                 PrintFatoraScreen(fatora: _fatora),
+                 DrawFatoraScreen(fatora: _fatora),
               ];
               setState(() {
                 _selectedIndex = 1;

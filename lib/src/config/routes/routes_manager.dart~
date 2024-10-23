@@ -1,7 +1,7 @@
 import 'package:fatora/src/domain/entities/fatora.dart';
 import 'package:fatora/src/presentation/screens/add_fatora/add_fatora_screen.dart';
-import 'package:fatora/src/presentation/screens/draw_fatora/draw_fatora_screen.dart';
 import 'package:fatora/src/presentation/screens/main/screen/main_screen.dart';
+import 'package:fatora/src/presentation/screens/print_fatora/print_fatora_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
@@ -24,7 +24,7 @@ class RoutesManager {
 
       case Routes.printerFatora:
         Fatora? fatora = routeSettings.arguments as Fatora?;
-        return _materialRoute(DrawFatoraScreen(fatora: fatora));
+        return _materialRoute(PrintFatoraScreen(fatora: fatora));
 
       case Routes.addFatora:
         return _materialRoute(const AddFatoraScreen());

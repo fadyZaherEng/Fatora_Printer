@@ -1,7 +1,7 @@
 import 'package:fatora/src/config/theme/color_schemes.dart';
 import 'package:fatora/src/core/resources/image_paths.dart';
 import 'package:fatora/src/domain/entities/fatora.dart';
-import 'package:fatora/src/presentation/screens/print_fatora/widgets/build_arrow_widget.dart';
+import 'package:fatora/src/presentation/screens/draw_fatora/widgets/build_arrow_widget.dart';
 import 'package:fatora/src/presentation/widgets/custom_text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
