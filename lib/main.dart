@@ -18,6 +18,7 @@ Future<void> main() async {
 }
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -27,7 +28,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         },
         builder: (context, state) {
           return MaterialApp(
-            navigatorKey: navigatorKey,
+            navigatorKey: appNavigatorKey,
             navigatorObservers: [
               routeObserver,
             ],
