@@ -21,7 +21,9 @@ class FatoraBloc extends Bloc<FatoraEvent, FatoraState> {
 
     DatabaseHelper dbHelper = DatabaseHelper();
     //open the database
+    // Get all users
     List<Fatora> fatoraList = await dbHelper.getFatora();
+    print('All Fatora: $fatoraList');
     emit(GetFatoraSuccess(fatoraList));
   }
 
